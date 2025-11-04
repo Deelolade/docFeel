@@ -5,25 +5,29 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signUpFormType, signUpSchema } from '@/app/schemas/authSchema';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { API_URL } from '@/app/config/env';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { LuEye, LuEyeOff } from 'react-icons/lu';
 const page = () => {
+    const [passwordType, setPasswordType] = useState<boolean>(false)
     const router = useRouter();
 
     const { register, handleSubmit, formState: { errors } } = useForm<signUpFormType>({
-        resolver: zodResolver(signUpSchema)
+        resolver: zodResolver(signUpSchema),
+        mode: "onSubmit"
     })
     const onSubmit = async (data: signUpFormType) => {
         try {
             const res = await axios.post(`${API_URL}/auth/register`, data);
-            console.log(res)
             toast.success(res.data.message || "User created successfully");
             router.push('/dashboard')
         }
         catch (error) {
-            console.log('error:', error);
+            const err = error as AxiosError<{ message: string }>
+            toast.error(err?.response?.data.message || "Somthing went wrong")
         }
     }
     return (
@@ -49,12 +53,20 @@ const page = () => {
                                 </div>
                                 <div className="flex flex-col">
                                     <label htmlFor="" className='text-sm mb-2 font-semibold'>Password</label>
-                                    <input type="password" {...register("password")} className='border border-gray-300 px-3 py-1 rounded-md font-semibold outline-0' placeholder="Enter a strong password" />
+                                    <div className="flex items-center border border-gray-300 px-3 py-1 rounded-md">
+                                        <input type={passwordType ? "text" : "password"} {...register("password")} className=' w-full font-semibold outline-0' placeholder="Enter your password" />
+                                        <i 
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        onClick={() => setPasswordType((prev) => !prev)}>{passwordType ? <LuEye /> : <LuEyeOff />}</i>
+                                    </div>
                                     {errors.password && <p className='text-sm text-red-500 mt-1 font-semibold'>{errors.password.message}</p>}
                                 </div>
                                 <div className="flex flex-col">
                                     <label htmlFor="" className='text-sm mb-2 font-semibold'> Confirm Password</label>
-                                    <input type="password" {...register("confirmPassword")} className='border border-gray-300 px-3 py-1 rounded-md font-semibold outline-0' placeholder="Re-enter your password" />
+                                    <div className="flex items-center border border-gray-300 px-3 py-1 rounded-md">
+                                        <input type={passwordType ? "text" : "password"} {...register("confirmPassword")} className=' w-full font-semibold outline-0' placeholder="Enter your password" />
+                                    <i onClick={()=> setPasswordType((prev)=> !prev)}>{passwordType ? <LuEye/> : <LuEyeOff/>}</i>
+                                    </div>
                                     {errors.confirmPassword && <p className='text-sm text-red-500 mt-1 font-semibold'>{errors.confirmPassword.message}</p>}
                                 </div>
                                 <div className="">

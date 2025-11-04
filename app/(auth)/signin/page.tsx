@@ -19,7 +19,6 @@ const page = () => {
         resolver: zodResolver(signInSchema)
     })
     const onSubmit = async (data: signInFormType) => {
-        // coxnsole.log(data);
         try{
             const res = await axios.post(`${API_URL}/auth/signin`, data);
             toast.success(res.data.message ||"Signed in successfully");
