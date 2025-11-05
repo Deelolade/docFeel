@@ -21,7 +21,6 @@ const page = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm<signUpFormType>({
         resolver: zodResolver(signUpSchema),
-        mode: "onSubmit"
     })
     const onSubmit = async (data: signUpFormType) => {
             setLoading(true)
@@ -44,7 +43,7 @@ const page = () => {
             <section className="flex justify-center items-center h-screen">
                 <div className=" flex justify-center items-center h-screen w-screen ">
                     <div className="w-full lg:w-1/2 flex justify-center items-center">
-                        <form className='w-[400px] p-8 shadow-sm lg:shadow-lg rounded-lg' onClick={handleSubmit(onSubmit)}>
+                        <form className='w-[400px] p-8 shadow-sm lg:shadow-lg rounded-lg' onSubmit={handleSubmit(onSubmit)}>
                             <div className=" text-center">
                                 <h1 className='text-xl md:text-2xl font-semibold mb-3'>Sign Up</h1>
                                 <p className='text-sm text-gray-500 font-semibold'>Sign up by entering your name, email address, and a secure password.</p>
