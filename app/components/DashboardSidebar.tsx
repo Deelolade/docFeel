@@ -1,26 +1,36 @@
 "use client"
 import Link from 'next/link'
-import React from 'react'
 import { BiUserCircle } from 'react-icons/bi'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { FaRegCaretSquareUp } from 'react-icons/fa'
 import { LuClipboardList } from 'react-icons/lu'
 import { PiSquaresFourBold } from 'react-icons/pi'
 import { useUser } from '../store/userStore'
+import { usePathname } from 'next/navigation'
 
 const Sidebar = () => {
   const { user } = useUser();
   const currentUser = { ...user };
+  const pathName = usePathname();
 
   return (
     <aside className='w-1/5 bg-slate-900 min-h-screen p-6 flex flex-col  justify-between text-[#EFF6FF] '>
       <div className="">
-        <h3 className='text-sm font-semibold mt-3 text-[#EFF6FF]'>DocFeel</h3>
+        <div className=" flex justify-between items-end">
+        <h3 className='text-2xl font-semibold mt-3 text-[#EFF6FF]'>DocFeel</h3>
+        <p className='text-sm font-semibold text-right'>{currentUser?.trialCount} / 5 trials</p>
+      </div>
         <ul className='mt-12 text-[#EFF6FF]'>
-          <Link href='' className='w-full hover:bg-slate-600 p-3 rounded-lg my-2 flex items-center 2xl:text-lg font-medium '><span className='scale-150 me-3 '><PiSquaresFourBold /></span> Dashboard</Link>
-          <Link href='' className='w-full hover:bg-slate-600 p-3 rounded-lg my-2 flex items-center 2xl:text-lg font-medium'><span className='scale-150 me-3 '><FaRegCaretSquareUp /></span>Bookings</Link>
-          <Link href='' className='w-full hover:bg-slate-600 p-3 rounded-lg my-2 flex items-center 2xl:text-lg font-medium'><span className='scale-150 me-3'><LuClipboardList /></span>Package Listings</Link>
-          {/* <li className='w-full hover:bg-slate-200 p-3 rounded-lg my-2 flex items-center text-lg font-medium'><span className='scale-150 me-3'><RiSettings4Fill/></span>Settings</li> */}
+          <Link href="/dashboard" className={`w-full hover:bg-gray-800 p-3 rounded-lg my-2 flex items-center text-white font-medium ${pathName === "/dashboard" ? "bg-gray-700": "hover:bg-gray-800"}`}>
+            <PiSquaresFourBold className="h-6 w-6 mr-3" /> Dashboard
+          </Link>
+          <Link href="/uploads" className="w-full hover:bg-gray-800 p-3 rounded-lg my-2 flex items-center text-white font-medium">
+            <FaRegCaretSquareUp className="h-6 w-6 mr-3" /> Uploads
+          </Link>
+          <Link href="/analyses" className="w-full hover:bg-gray-800 p-3 rounded-lg my-2 flex items-center text-white font-medium">
+            <LuClipboardList className="h-6 w-6 mr-3" /> Analyses Completed
+          </Link>
+
         </ul>
       </div>
       <div className=" flex items-center justify-between ">
@@ -28,7 +38,7 @@ const Sidebar = () => {
           <BiUserCircle className='text-5xl' />
           <div className="">
             <h4 className='text-lg font-semibold'>{`${currentUser?.name}  `}</h4>
-            <p className='text-sm text-zinc-300'>{currentUser.isPaidUser === false ? "Free User" : "Paid User"}</p>
+            <p className='text-sm text-zinc-300'>{currentUser.plan} user</p>
           </div>
         </div>
         <span className='scale-150'>
