@@ -1,1 +1,1 @@
-Building an AI powered Document extractor and summarizer called "DocPeel"
+Building an AI powered Document extractor and summarizer called "Docfeel"

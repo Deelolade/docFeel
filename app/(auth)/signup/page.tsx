@@ -70,7 +70,7 @@ const page = () => {
                                     {errors.confirmPassword && <p className='text-sm text-red-500 mt-1 font-semibold'>{errors.confirmPassword.message}</p>}
                                 </div>
                                 <div className="">
-                                    <button className='bg-black text-white text-sm w-full py-2 rounded-lg font-semibold'>Sign Up</button>
+                                    <button className='bg-black hover:bg-gray-600 text-white text-sm w-full py-2 rounded-lg font-semibold  transition duration-200 ease-in-out'>Sign Up</button>
                                     <div className="mt-5 ">
                                         <p className=' text-center text-sm font-semibold  '>Already joined us? <Link href="/signin" className='hover:underline'>Sign in here</Link></p>
                                     </div>

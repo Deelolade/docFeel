@@ -55,7 +55,7 @@ const page = () => {
                                     {errors.password && <p className='text-sm text-red-500 mt-1 font-semibold'>{errors.password.message}</p>}
                                 </div>
                                 <div className="">
-                                    <button className='bg-black text-white text-sm w-full py-2 rounded-lg font-semibold'>Sign In</button>
+                                    <button className='bg-black hover:bg-gray-600 text-white text-sm w-full py-2 rounded-lg font-semibold  transition duration-200 ease-in-out'>Sign In</button>
                                     <div className="mt-5 ">
                                         <p className=' text-center text-sm font-semibold'>New here? <Link href="/signup" className='hover:underline'>Sign Up</Link></p>
                                     </div>
