@@ -15,30 +15,34 @@ import { useUser } from '@/app/store/userStore';
 import ButtonLoading from '@/app/components/ui/ButtonLoading';
 
 const page = () => {
-    const {  setUser }= useUser();
+    const { setUser } = useUser();
     const router = useRouter();
-    const [ loading, setLoading]= useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
     const [passwordType, setPasswordType] = useState<boolean>(false);
     const { register, handleSubmit, formState: { errors } } = useForm<signInFormType>({
         resolver: zodResolver(signInSchema)
     })
-    
+
     const onSubmit = async (data: signInFormType) => {
         setLoading(true)
-        try{
-            const res = await axios.post(`${API_URL}/auth/signin`, data);
-            toast.success(res.data.message ||"Signed in successfully");
+        try {
+            const res = await axios.post(`${API_URL}/auth/signin`, data,
+                {
+                    withCredentials: true 
+                }
+            );
+            toast.success(res.data.message || "Signed in successfully");
             console.log(res.data.user)
             setUser(res.data.user)
             setLoading(false)
             router.push('/dashboard')
         }
-        catch(error){
-            const err = error as AxiosError<{ message: string}>
+        catch (error) {
+            const err = error as AxiosError<{ message: string }>
             console.log('error:', error);
             toast.error(err?.response?.data.message || "Something went wrong");
-        } 
-        finally{
+        }
+        finally {
             setLoading(false)
         }
     }
@@ -62,12 +66,12 @@ const page = () => {
                                     <label htmlFor="" className='text-sm mb-2 font-semibold'>Password</label>
                                     <div className="flex items-center border border-gray-300 px-3 py-1 rounded-md">
                                         <input type={passwordType ? "text" : "password"} {...register("password")} className=' w-full font-semibold outline-0' placeholder="Enter your password" />
-                                    <i onClick={()=> setPasswordType((prev)=> !prev)}>{passwordType ? <LuEye/> : <LuEyeOff/>}</i>
+                                        <i onClick={() => setPasswordType((prev) => !prev)}>{passwordType ? <LuEye /> : <LuEyeOff />}</i>
                                     </div>
                                     {errors.password && <p className='text-sm text-red-500 mt-1 font-semibold'>{errors.password.message}</p>}
                                 </div>
                                 <div className="">
-                                    <button disabled={loading} className='bg-black hover:bg-gray-600 text-white text-sm w-full py-2 rounded-lg font-semibold  transition duration-200 ease-in-out'>{loading ? <ButtonLoading/> :"Sign In"}</button>
+                                    <button disabled={loading} className='bg-black hover:bg-gray-600 text-white text-sm w-full py-2 rounded-lg font-semibold  transition duration-200 ease-in-out'>{loading ? <ButtonLoading /> : "Sign In"}</button>
                                     <div className="mt-5 ">
                                         <p className=' text-center text-sm font-semibold'>New here? <Link href="/signup" className='hover:underline'>Sign Up</Link></p>
                                     </div>

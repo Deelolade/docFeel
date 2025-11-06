@@ -2,7 +2,7 @@
 
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { useUser } from "../store/userStore";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { API_URL } from "../config/env";
 import { toast } from "react-toastify";
 
@@ -16,21 +16,27 @@ const DashboardMain = () => {
         const file = e.target.files?.[0]
         console.log("file", file)
         if (!file) {
+            toast.error("No file found")
             console.log("file not found")
+            return;
         }
 
-            try {
-                const res = await axios.post(`${API_URL}/document/create`, file,{
-                    headers:{
-                        // Authorization: `Bearer ${token}`,
-                        "Content-Type": "multipart/form-data"
-                    }
-                })
-                toast.success("uploaded successfully")
-                console.log(res.data)
-            } catch (error) {
-                console.log(error)
-            }
+        const formData = new FormData();
+        formData.append("document",file)
+        try {
+            const res = await axios.post(`${API_URL}/document/create`, formData, {
+                withCredentials: true,
+                headers:{
+                    "Content-Type":"multipart/form-data"
+                }
+            })
+            toast.success("uploaded successfully")
+            console.log(res.data)
+        } catch (error) {
+            const err = error as AxiosError<{ message: string }>
+            toast.error(err?.response?.data.message || "Somthing went wrong")
+            console.log(error)
+        }
     }
     return (
         <section className='flex-1 bg-[#EFF6FF] min-h-screen p-6'>

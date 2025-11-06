@@ -25,7 +25,11 @@ const page = () => {
     const onSubmit = async (data: signUpFormType) => {
             setLoading(true)
         try {
-            const res = await axios.post(`${API_URL}/auth/register`, data);
+            const res = await axios.post(`${API_URL}/auth/register`, data,
+                {
+                    withCredentials: true  // ✅ important for cookies
+                }
+            );
             toast.success(res.data.message || "User created successfully");
             setUser(res.data.user)
             router.push('/dashboard')
