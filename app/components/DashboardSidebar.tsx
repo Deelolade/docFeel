@@ -8,7 +8,7 @@ import { PiSquaresFourBold } from 'react-icons/pi'
 import { useUser } from '../store/userStore'
 import { usePathname } from 'next/navigation'
 
-const Sidebar = () => {
+const DashboardSidebar = () => {
   const { user } = useUser();
   const currentUser = { ...user };
   const pathName = usePathname();
@@ -49,4 +49,4 @@ const Sidebar = () => {
   )
 }
 
-export default Sidebar
+export default DashboardSidebar

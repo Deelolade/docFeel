@@ -5,6 +5,9 @@ import { UploadedDocument } from "@/app/types/document"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { useRouter } from "next/navigation"
+import { toast } from "react-toastify"
+import ButtonLoading from "./ButtonLoading"
+import Loading from "./Loading"
 
 const DashboardList = () => {
     const route = useRouter();
@@ -13,7 +16,6 @@ const DashboardList = () => {
             { withCredentials: true })
         console.log(res.data)
         return res.data.documents;
-
     }
 
     const { data: documents, isLoading, isError } = useQuery<UploadedDocument[]>({
@@ -22,11 +24,13 @@ const DashboardList = () => {
         staleTime: 5 * 60 * 1000,
         refetchOnMount: false,
     })
-    const handleRoute =(id: string)=>{
-        route.push(`documents/${id}`)
-    }
+    const handleViewDocument = (id: string) => {
+        route.push(`documents/${id}`);
+    };
+    // isError && toast.error("Error occured")
     return (
         <div className="mt-6">
+            {isLoading && <Loading />}
             <h3 className="text-xl font-bold">Uploaded Documents</h3>
             <div className="mt-4 rounded-2xl border border-gray-400 py-2">
                 <div className=" grid grid-cols-5 text-center text-lg py-2 font-bold border-b border-gray-400">
@@ -37,18 +41,23 @@ const DashboardList = () => {
                     <p>Actions</p>
                 </div>
                 <div className="h-96 overflow-y-auto">
-                    {documents?.map((doc, idx) => {
+                    {documents && documents?.length > 0 ? (documents?.map((doc, idx) => {
                         return (
-                            <div onClick={()=> handleRoute(doc._id)} className="grid grid-cols-5 h-32 py-4 text-center font-semibold hover:bg-slate-300 transition-colors duration-200 place-content-center items-center" key={idx}>
+                            <div className="grid grid-cols-5 h-32 py-4 text-center font-semibold hover:bg-slate-300 transition-colors duration-200 place-content-center items-center" key={doc._id || idx}>
                                 <p>{doc.fileName}</p>
                                 <p>{new Date(doc.createdAt).toLocaleDateString()}</p>
                                 <p className="text-center">{doc.wordCount}</p>
                                 <p>{doc?.summary
                                     ? doc.summary.split(" ").slice(0, 20).join(" ") + (doc.summary.split(" ").length > 30 ? "..." : "")
                                     : "No summary yet"}</p>
+                                <div className="">
+                                    <button className=" text-white px-6 py-2 bg-[#1F2937]" onClick={() => handleViewDocument(doc._id)} >View</button>
+                                </div>
                             </div>
                         )
-                    })}
+                    })) : (<p className="text-center text-gray-600 py-8">
+                        You have not uploaded any documents yet !!
+                    </p>)}
                 </div>
             </div>
         </div>

@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+
+body{
+  background-color: #EFF6FF;
+}
 @keyframes bounce-dots {
   0%, 80%, 100% { transform: scale(0); }
   40% { transform: scale(1); }

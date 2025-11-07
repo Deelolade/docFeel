@@ -5,15 +5,13 @@ import { useUser } from "../store/userStore";
 import axios, { AxiosError } from "axios";
 import { API_URL } from "../config/env";
 import { toast } from "react-toastify";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { UploadedDocument } from "../types/document";
 import DashboardList from "./ui/DashboardList";
+import { useRouter } from "next/navigation";
 
 const DashboardMain = () => {
     const { user } = useUser();
     const currentUser = { ...user };
-    const queryClient = useQueryClient();
-
+    const router = useRouter();
 
 const handleDocument = async (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log("hello")
@@ -36,6 +34,7 @@ const handleDocument = async (e: React.ChangeEvent<HTMLInputElement>) => {
         })
         toast.success("uploaded successfully")
         console.log(res.data)
+        // router.push(`/documents/${id}`)
     } catch (error) {
         const err = error as AxiosError<{ message: string }>
         toast.error(err?.response?.data.message || "Somthing went wrong")
@@ -43,7 +42,7 @@ const handleDocument = async (e: React.ChangeEvent<HTMLInputElement>) => {
     }
 }
 return (
-    <section className='flex-1 bg-[#EFF6FF] min-h-screen p-6'>
+    <section className='flex-1  min-h-screen p-6'>
         <h1 className="text-2xl font-bold">Welcome, {currentUser?.name}</h1>
         <div className="">
             <div className="relative mt-8 m-3">
