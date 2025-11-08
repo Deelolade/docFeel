@@ -22,14 +22,16 @@ const DocumentDetails = () => {
     const { data: document, isLoading, isError } = useQuery<UploadedDocument>({
         queryKey: ['document', id],
         queryFn: () => handleDocument(id),
-        staleTime: 10 * 60 * 1000,
+        // staleTime: 10 * 60 * 1000,
         refetchOnMount: false,
         enabled: Boolean(id),
     })
     const fetchSummary = async (id: string) => {
         setLoading(true)
         try {
-            const res = await axios.post(`${API_URL}/document/summarize/${id}`, { withCredentials: true });
+            const res = await axios.post(`${API_URL}/document/summarize/${id}`,{}, { withCredentials: true });
+            console.log(res.data)
+            toast.success(res.data.message)
         } catch (error) {
             const err = error as AxiosError<{ message: string }>
             console.log('error:', error);
