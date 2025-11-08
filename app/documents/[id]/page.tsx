@@ -5,7 +5,7 @@ import DocumentDetails from '@/app/components/DocumentDetails';
 const page = () => {
     
     return (
-        <main className='bg-primary min-h-screen flex items-center  justify-between'>
+        <main className='bg-primary min-h-screen flex items-center justify-between'>
             <DashboardSidebar />
             <DocumentDetails/>
 
