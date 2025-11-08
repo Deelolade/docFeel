@@ -1,6 +1,6 @@
 "use client"
 
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { UploadedDocument } from "@/app/types/document";
 import axios, { AxiosError } from 'axios';
@@ -15,13 +15,21 @@ const DocumentDetails = () => {
     const { user } = useUser();
     const { id } = useParams() as { id: string }
     const [loading, setLoading] = useState(false)
-
+    const router = useRouter()
     const [copied, setCopied] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null);
+
     const openChatWithAI = (docId: string) => {
+        router.push('/')
+    }
+    const handleDeleteButton = async (docId: string) => {
         console.log(docId)
+        setSelectedDocumentId(docId);
+        setIsDeleteModalOpen(true);
     }
     const handleDeleteDocument = async (docId: string) => {
-        console.log(docId)
+        
     }
     const handleCopySummary = async () => {
         if (!document?.summary) return;
@@ -91,7 +99,7 @@ const DocumentDetails = () => {
                                 </>
                             )}
                         </button>
-                        
+
                     </div>
                 </div>
                 <div className="mt-12">
@@ -152,21 +160,51 @@ const DocumentDetails = () => {
                                 </div>
                             )}</div>
                         </div>
-                            <div className="flex flex-wrap gap-3 justify-end mt-6">
-                                <button
-                            onClick={() => openChatWithAI(document?._id || "")}
-                            className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md bg-purple-600 hover:bg-purple-700 text-white"
-                        >
-                            <FiMessageSquare className="w-4 h-4" />
-                            Chat with AI
-                        </button>
-                        <button onClick={() => handleDeleteDocument(document?._id || "")} className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md bg-red-600 hover:bg-red-700 text-white">
-                            <FiTrash2 className="w-4 h-4" /> Delete
-                        </button>
-                            </div>
+                        <div className="flex flex-wrap gap-3 justify-end mt-6">
+                            <button
+                                onClick={() => openChatWithAI(document?._id || "")}
+                                className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md bg-purple-600 hover:bg-purple-700 text-white"
+                            >
+                                <FiMessageSquare className="w-4 h-4" />
+                                Chat with AI
+                            </button>
+                            <button onClick={() => handleDeleteButton(document?._id || "")} className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md bg-red-600 hover:bg-red-700 text-white">
+                                <FiTrash2 className="w-4 h-4" /> Delete
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
+            {isDeleteModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-96 max-w-full">
+                        <h3 className="text-lg font-semibold mb-4 text-gray-800">
+                            Confirm Delete
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-6">
+                            Are you sure you want to delete this document? This action cannot be undone.
+                        </p>
+                        <div className="flex justify-end gap-3">
+                            <button
+                                onClick={() => setIsDeleteModalOpen(false)}
+                                className="px-4 py-2 text-sm font-medium rounded-md bg-gray-300 hover:bg-gray-400"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={() => {
+                                    handleDeleteDocument(selectedDocumentId || '');
+                                    setIsDeleteModalOpen(false);
+                                }}
+                                className="px-4 py-2 text-sm font-medium rounded-md bg-red-600 hover:bg-red-700 text-white"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </section>
     )
 }
