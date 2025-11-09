@@ -21,7 +21,7 @@ const DocumentDetails = () => {
     const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null);
 
     const openChatWithAI = (docId: string) => {
-        router.push('/')
+        router.push('/dashboard')
     }
     const handleDeleteButton = async (docId: string) => {
         console.log(docId)
@@ -29,7 +29,19 @@ const DocumentDetails = () => {
         setIsDeleteModalOpen(true);
     }
     const handleDeleteDocument = async (docId: string) => {
-        
+        setLoading(true)
+        try {
+            const res = await axios.delete(`${API_URL}/document/${docId}`, { withCredentials: true })
+            console.log(res.data)
+            toast.success(res.data.message)
+            router.push('/dashboard')
+        } catch (error) {
+            const err = error as AxiosError<{ message: string }>
+            console.log('error:', error);
+            toast.error(err?.response?.data.message || "Something went wrong");
+        } finally {
+            setLoading(false)
+        }
     }
     const handleCopySummary = async () => {
         if (!document?.summary) return;
@@ -66,7 +78,7 @@ const DocumentDetails = () => {
     }
     return (
         <section className='flex-1 min-h-screen py-6 px-8'>
-            {loading && <Loading />}
+            {(isLoading || loading) && <Loading />}
             <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-md p-8 space-y-8">
                 <div className="flex items-center justify-between">
                     <div className="">
@@ -137,8 +149,8 @@ const DocumentDetails = () => {
                                 </p>
                             </div>
                         </div>
-                        <div className="  ">
-                            <div className='mx-auto'>{document?.summary ? (
+                        <div className=" ">
+                            <div className='mx-auto  max-h-[60vh] overflow-y-auto'>{document?.summary ? (
                                 <div className="mt-10  bg-white p-5 shadow-lg rounded-lg">
                                     <div className="text-sm font-semibold text-center text-gray-800 leading-loose break-w ords whitespace-pre-wrap">
                                         {document.summary.split(" ").join(" ")}
