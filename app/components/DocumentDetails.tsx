@@ -7,7 +7,7 @@ import axios, { AxiosError } from 'axios';
 import { API_URL } from '@/app/config/env';
 import { useUser } from '../store/userStore';
 import { toast } from 'react-toastify';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Loading from './ui/Loading';
 import { FiCheck, FiCopy, FiMessageSquare, FiTrash2 } from 'react-icons/fi';
 
@@ -76,6 +76,11 @@ const DocumentDetails = () => {
             setLoading(false)
         }
     }
+    useEffect(() => {
+        if (isError) {
+            toast.error("Error occurred while fetching document");
+        }
+    }, [isError])
     return (
         <section className='flex-1 min-h-screen py-6 px-8'>
             {(isLoading || loading) && <Loading />}

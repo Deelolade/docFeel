@@ -6,9 +6,8 @@ const page = () => {
   return (
     <main className='flex justify-between items-start '>
       <DashboardSidebar/>
-      <div className="p-4">
         <DashboardList/>
-      </div>
+      
     </main>
   )
 }
