@@ -5,16 +5,20 @@ import { BsThreeDotsVertical } from 'react-icons/bs'
 import { FaRegCaretSquareUp } from 'react-icons/fa'
 import { LuClipboardList } from 'react-icons/lu'
 import { PiSquaresFourBold } from 'react-icons/pi'
-import { useUser } from '../store/userStore'
+// import { useUser } from '../store/userStore'
 import { usePathname } from 'next/navigation'
+import { useUser } from '../hooks/useUser'
+import Loading from './ui/Loading'
 
 const DashboardSidebar = () => {
-  const { user } = useUser();
+    const { data: user, isLoading} = useUser();
+    console.log(user)
   const currentUser = { ...user };
   const pathName = usePathname();
 
   return (
     <aside className='w-1/5 bg-slate-900 min-h-screen p-6 flex flex-col  justify-between text-[#EFF6FF] '>
+      {isLoading && <Loading/>}
       <div className="">
         <div className=" flex justify-between items-end">
         <h3 className='text-2xl font-semibold mt-3 text-[#EFF6FF]'>DocFeel</h3>
@@ -37,7 +41,7 @@ const DashboardSidebar = () => {
         <div className="flex items-center space-x-5">
           <BiUserCircle className='text-5xl' />
           <div className="">
-            <h4 className='text-lg font-semibold'>{`${currentUser?.name}  `}</h4>
+            <h4 className='text-lg font-semibold'>{`${currentUser?.name}`}</h4>
             <p className='text-sm text-zinc-300'>{currentUser.plan} user</p>
           </div>
         </div>
