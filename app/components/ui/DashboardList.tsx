@@ -1,27 +1,14 @@
 "use client"
 
-import { API_URL } from "@/app/config/env"
-import { UploadedDocument } from "@/app/types/document"
-import { useQuery } from "@tanstack/react-query"
-import axios from "axios"
+
 import { useRouter } from "next/navigation"
 import Loading from "./Loading"
+import { useDocuments } from "@/app/hooks/useDocuments"
 
 const DashboardList = () => {
     const route = useRouter();
-    const fetchAllUserDocuments = async (): Promise<UploadedDocument[]> => {
-        const res = await axios.get<{ documents: UploadedDocument[] }>(`${API_URL}/document/`,
-            { withCredentials: true })
-        console.log(res.data)
-        return res.data.documents;
-    }
-
-    const { data: documents, isLoading, isError } = useQuery<UploadedDocument[]>({
-        queryKey: ['documents'],
-        queryFn: fetchAllUserDocuments,
-        staleTime: 5 * 60 * 1000,
-        refetchOnMount: false,
-    })
+    const { data: documents, isLoading, isError } = useDocuments();
+    
     const handleViewDocument = (id: string) => {
         route.push(`documents/${id}`);
     };

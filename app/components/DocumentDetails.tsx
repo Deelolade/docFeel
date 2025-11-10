@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import Loading from './ui/Loading';
 import { FiCheck, FiCopy, FiMessageSquare, FiTrash2 } from 'react-icons/fi';
+import { useDeleteDocument, useDocumentById } from '@/app/hooks/useDocuments';
 
 const DocumentDetails = () => {
     const { user } = useUser();
@@ -20,29 +21,20 @@ const DocumentDetails = () => {
     const queryClient = useQueryClient();
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null);
-
+    const deleteDocument = useDeleteDocument();
     const openChatWithAI = (docId: string) => {
         router.push('/dashboard')
     }
-    const handleDeleteButton = async (docId: string) => {
-        console.log(docId)
-        setSelectedDocumentId(docId);
+    const handleDeleteButton = async (id: string) => {
+        setSelectedDocumentId(id);
         setIsDeleteModalOpen(true);
     }
-    const handleDeleteDocument = async (docId: string) => {
-        setLoading(true)
-        try {
-            const res = await axios.delete(`${API_URL}/document/${docId}`, { withCredentials: true })
-            console.log(res.data)
-            toast.success(res.data.message)
-            router.push('/dashboard')
-        } catch (error) {
-            const err = error as AxiosError<{ message: string }>
-            console.log('error:', error);
-            toast.error(err?.response?.data.message || "Something went wrong");
-        } finally {
-            setLoading(false)
-        }
+    const handleDeleteDocument = async (id: string) => {
+        deleteDocument.mutate(id, {
+            onSuccess: () => {
+                router.push('/dashboard')
+            }
+        })
     }
     const handleCopySummary = async () => {
         if (!document?.summary) return;
@@ -51,25 +43,14 @@ const DocumentDetails = () => {
         toast.success("Summary copied to clipboard!");
         setTimeout(() => setCopied(false), 2000);
     };
-    const handleDocument = async (id: string): Promise<UploadedDocument> => {
-        const res = await axios.get(`${API_URL}/document/${id}`, { withCredentials: true })
-        console.log(res.data.document)
-        return res.data.document;
-    }
-    const { data: document, isLoading, isError } = useQuery<UploadedDocument>({
-        queryKey: ['document', id],
-        queryFn: () => handleDocument(id),
-        staleTime: 10 * 60 * 1000,
-        refetchOnMount: false,
-        enabled: Boolean(id),
-    })
+    const { data: document, isLoading, isError } = useDocumentById(id)
     const fetchSummary = async (id: string) => {
         setLoading(true)
         try {
             const res = await axios.post(`${API_URL}/document/summarize/${id}`, {}, { withCredentials: true });
             console.log(res.data)
             toast.success(res.data.message)
-            queryClient.invalidateQueries({queryKey: ['document', id]})
+            queryClient.invalidateQueries({ queryKey: ['document', id] })
         } catch (error) {
             const err = error as AxiosError<{ message: string }>
             console.log('error:', error);
