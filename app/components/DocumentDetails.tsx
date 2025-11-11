@@ -22,7 +22,7 @@ const DocumentDetails = () => {
     const queryClient = useQueryClient();
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null);
-    const [changeFileNameModalOpen, setChangeFileNameModalOpen] = useState(true);
+    const [changeFileNameModalOpen, setChangeFileNameModalOpen] = useState(false);
     const deleteDocument = useDeleteDocument();
     const summarizeDocument = useSummarizeDocument();
     const openChatWithAI = (docId: string) => {
@@ -62,7 +62,7 @@ const DocumentDetails = () => {
             {(isLoading || loading) && <Loading />}
             <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-md p-8 space-y-8">
                 <div className="flex items-center justify-between">
-                    <div className="" onClick={handleChangeFileName}>
+                    <div className="" onClick={()=> setChangeFileNameModalOpen(true)}>
                         <h2 className='text-2xl font-bold text-slate-800 mb-1 p-2 rounded-lg'>{document?.fileName}</h2>
                         <p className="text-sm text-slate-500">Uploaded by {user?.name || "You"}</p>
                     </div>
@@ -170,7 +170,12 @@ const DocumentDetails = () => {
                     </div>
                 </div>
             </div>
-            {changeFileNameModalOpen && (<ChangeFileName/>)}
+            {changeFileNameModalOpen && (<ChangeFileName 
+            isOpen={changeFileNameModalOpen}
+            currentName= {document?.fileName ?? ''}
+            onClose={()=> setChangeFileNameModalOpen(false)}
+            onConfirm={handleChangeFileName}
+            />)}
             {isDeleteModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20">
                     <div className="bg-white rounded-lg shadow-lg p-6 w-96 max-w-full">
