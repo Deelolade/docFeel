@@ -39,9 +39,10 @@ export const useDocumentById = (id?: string) => {
     return useQuery<UploadedDocument>({
         queryKey: ['document', id],
         queryFn: () => handleDocument(id!),
-        // staleTime: 10 * 60 * 1000,
-         refetchOnWindowFocus: true, 
-        refetchOnMount: false,
+        staleTime: 0,
+        refetchOnWindowFocus: true, 
+        refetchOnReconnect: true,
+        refetchOnMount: true,
         enabled: Boolean(id),
     })
 }
@@ -68,8 +69,9 @@ export const useDocuments = () => {
     return useQuery<UploadedDocument[]>({
         queryKey: ['documents'],
         queryFn: handleFetchAllUserDocuments,
-        staleTime: 5 * 60 * 1000,
-        refetchOnMount: false,
+        staleTime: 0,
+        refetchOnMount: 'always',
+        refetchOnWindowFocus: true
     })
 }
 

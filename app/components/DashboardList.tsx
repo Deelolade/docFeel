@@ -4,6 +4,7 @@
 import { useRouter } from "next/navigation"
 import Loading from "./ui/Loading"
 import { useDocuments } from "@/app/hooks/useDocuments"
+import UploadDocument from "./UploadDocument"
 
 const DashboardList = () => {
     const route = useRouter();
@@ -13,6 +14,8 @@ const DashboardList = () => {
         route.push(`documents/${id}`);
     };
     return (
+        <>
+        <UploadDocument/>
         <div className="mt-6 flex-1 px-4">
             {isError && <p className="text-lg text-red-500">error loading page</p>}
             {isLoading && <Loading />}
@@ -46,6 +49,8 @@ const DashboardList = () => {
                 </div>
             </div>
         </div>
+        </>
+
     )
 }
 
