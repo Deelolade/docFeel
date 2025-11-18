@@ -2,17 +2,22 @@
 
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import { API_URL } from "../config/env";
+import { useParams } from "next/navigation";
+import { useChats } from "../hooks/useChat";
 
 type Message = {
-  id: string;
   role: "user" | "assistant";
   content: string;
 };
 
 export default function ChatPage() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const {id}= useParams()
+  console.log(`id:${id}`)
+  // const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const { data:messages, isLoading, isError} = useChats(id)
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
@@ -35,7 +40,7 @@ export default function ChatPage() {
     setLoading(true);
 
     try {
-      const res = await axios.post("/api/chat", {
+      const res = await axios.post(`${API_URL}/document/chat/${id}`, {
         message: input,
         history: messages, // optional
       }, {withCredentials: true});
@@ -61,15 +66,15 @@ export default function ChatPage() {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) =>  
     e.key === "Enter" && !e.shiftKey ? (e.preventDefault(), sendMessage()) : null;
-
+  console.log(messages)
   return (
     <div className="flex-1">
         <div className="flex flex-col max-w-5xl mx-auto justify-center h-screen max-h-screen">
       {/* Chat window */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 ">
-        {messages.map((msg) => (
+        {messages?.map((msg:any, idx:any) => (
           <div
-            key={msg.id}
+            key={idx}
             className={`flex ${
               msg.role === "user" ? "justify-end" : "justify-start"
             }`}
