@@ -5,9 +5,9 @@ import React from 'react'
 const page = () => {
   return (
     <main className='bg-primary min-h-screen flex items-center justify-between'>
-            <DashboardSidebar />
-            <ChatPage/>
-        </main>
+      <DashboardSidebar />
+      <ChatPage />
+    </main>
   )
 }
 

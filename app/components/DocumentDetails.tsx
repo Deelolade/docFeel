@@ -28,7 +28,7 @@ const DocumentDetails = () => {
     const summarizeDocument = useSummarizeDocument();
     const updateDocument = useUpdateDocumentName()
     const openChatWithAI = (docId: string) => {
-        router.push(`/chat/${docId}`)
+        router.push(`/chats/${docId}`)
     }
     const handleDeleteButton = async (id: string) => {
         setSelectedDocumentId(id);
