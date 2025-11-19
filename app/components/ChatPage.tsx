@@ -19,9 +19,9 @@ export default function ChatPage() {
   const id = params.id as string;
   console.log(id)
   const route = useRouter()
-  const [messages, setMessages] = useState<Message[]>([]);
+  // const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const { data: savedMessages = [], isLoading, isError } = useChats(id)
   const queryClient = useQueryClient()
   const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -33,25 +33,26 @@ export default function ChatPage() {
   // Combine saved + pending messages
   const allMessages = [...savedMessages, ...pendingMessages];
   // Auto-scroll on new message
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [allMessages]);
 
   const sendMessage = async () => {
-    if (!input.trim() || loading) return;
+    if (!input.trim() || isSending) return;
 
     const newUserMessage: Message = {
       role: "user",
       content: input,
     };
 
-    setMessages((prev) => [...prev, newUserMessage]);
+    setPendingMessages((prev) => [...prev, newUserMessage]);
     setInput("");
-    setLoading(true);
+    setIsSending(true);
 
     try {
       const res = await axios.post(`${API_URL}/document/chat/${id}`, {
-        message: input,
+        message: input.trim(),
       }, { withCredentials: true });
 
       const aiMessage: Message = {
@@ -59,22 +60,22 @@ export default function ChatPage() {
         content: res.data.reply,
       };
 
-      setMessages((prev) => [...prev, aiMessage]);
+      setPendingMessages((prev) => [...prev, aiMessage]);
       queryClient.invalidateQueries({ queryKey: ['chat', id] })
     } catch (err) {
       const errorMessage: Message = {
         role: "assistant",
         content: "Something went wrong. Please try again.",
       };
-      setMessages((prev) => [...prev, errorMessage]);
+      setPendingMessages((prev) => [...prev, errorMessage]);
     } finally {
-      setLoading(false);
+      setIsSending(false);
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) =>
     e.key === "Enter" && !e.shiftKey ? (e.preventDefault(), sendMessage()) : null;
-  console.log(messages)
+  // console.log(messages)
   const handleRouteToUpload = (id: string) => {
     route.push(`/documents/${id}`)
   }
@@ -83,10 +84,11 @@ export default function ChatPage() {
       <div className="bg-white/10 h-18 absolute w-[80%] shadow-2xl backdrop-blur-xl p-5 flex items-center">
         <button className="hover:bg-gray-300 p-2 rounded-md" onClick={() => handleRouteToUpload(id)}><FaArrowLeft className="scale-125" /></button>
       </div>
-      <div className="flex flex-col max-w-5xl mx-auto justify-center h-full">
+      <div className="flex flex-col max-w-5xl mx-auto justify-center h-full pt-18">
         {/* Chat window */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4 ">
-          {savedMessages?.map((msg: any, idx: any) => (
+          {allMessages.length > 0 ? (
+             allMessages.map((msg, idx) => (
             <div
               key={idx}
               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"
@@ -94,16 +96,20 @@ export default function ChatPage() {
             >
               <div
                 className={`max-w-[75%] rounded-lg px-4 py-3 text-sm whitespace-pre-wrap ${msg.role === "user"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-900"
+                  ? "bg-gray-800 text-white"
+                  : "bg-gray-200 text-gray-900"
                   }`}
               >
                 {msg.content}
               </div>
             </div>
-          ))}
+          ))) : (
+            <div className="text-center text-gray-500 py-12">
+              <p className="text-lg">No messages yet</p>
+              <p className="text-sm mt-2">Start the conversation by typing below!</p>
+            </div>)}
 
-          {loading && (
+          {isSending && (
             <div className="text-gray-600 text-sm italic">AI is typing…</div>
           )}
 
@@ -114,7 +120,7 @@ export default function ChatPage() {
         <div className="shadow-stone-400 p-4 bg-white">
           <div className="flex gap-4 items-end">
             <textarea
-              className="flex-1 border rounded-lg p-3 text-sm resize-none h-24 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 border rounded-lg p-3 text-sm resize-none h-24 focus:outline-none focus:ring-2 focus:ring-slate-800"
               placeholder="Type your message… (Shift+Enter for new line)"
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -123,8 +129,8 @@ export default function ChatPage() {
 
             <button
               onClick={sendMessage}
-              disabled={loading}
-              className="px-4 py-2 rounded-lg bg-blue-600 text-white disabled:bg-blue-400"
+              disabled={isSending}
+              className="px-4 py-2 rounded-lg bg-slate-800 text-white disabled:bg-slate-5 00"
             >
               Send
             </button>
