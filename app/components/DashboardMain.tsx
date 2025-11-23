@@ -2,7 +2,7 @@
 
 import { useUser } from "../store/userStore";
 import DashboardList from "./DashboardList";
-import UploadDocument from "./UploadDocument";
+import { DashboardStats } from "./DashboardStats";
 
 
 const DashboardMain = () => {
@@ -13,7 +13,10 @@ const DashboardMain = () => {
 return (
     <section className='flex-1  min-h-screen p-6'>
         <h1 className="text-2xl font-bold">Welcome, {currentUser?.name}</h1>
-        {/* <UploadDocument/> */}
+        <DashboardStats
+                totalFolders={12}
+                totalUploads={48}
+                pointsRemaining={120} />
         <DashboardList/>
     </section>
 )

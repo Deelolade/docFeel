@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
 
-body{
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+body {
   background-color: #EFF6FF;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 @keyframes bounce-dots {
   0%, 80%, 100% { transform: scale(0); }
