@@ -1,4 +1,6 @@
+'use client'
 import { Folder, Upload, Coins, BarChart3 } from "lucide-react";
+import { useDashboardData } from "../hooks/useDashboard";
 
 interface StatsProps {
   totalFolders: number;
@@ -7,6 +9,8 @@ interface StatsProps {
 }
 
 export function DashboardStats({ totalFolders, totalUploads, pointsRemaining }: StatsProps) {
+  const [totalFoldersQuery, totalUploadsQuery] = useDashboardData()
+  console.log(totalFoldersQuery)
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4 mb-10">
 
