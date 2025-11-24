@@ -13,10 +13,7 @@ const DashboardMain = () => {
 return (
     <section className='flex-1  min-h-screen p-6'>
         <h1 className="text-2xl font-bold">Welcome, {currentUser?.name}</h1>
-        <DashboardStats
-                totalFolders={12}
-                totalUploads={48}
-                pointsRemaining={120} />
+        <DashboardStats />
         <DashboardList/>
     </section>
 )
