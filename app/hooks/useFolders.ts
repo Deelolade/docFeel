@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import axios from "axios";
 import { toast } from "react-toastify";
 import { API_URL } from "../config/env";
@@ -15,10 +15,12 @@ const getAllUserFolders = async () => {
 }
 
 export const useCreateFolder = () =>{
+    const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (name:string)=> CreateNewFolder (name),
         onSuccess: (data) => {
             console.log(data)
+            queryClient.invalidateQueries({ queryKey: ['userFolders'] });
                     toast.success(data.message || 'Folder created successfully!');
                 },
                 onError: (error: any) => {
