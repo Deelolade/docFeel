@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Folder, FolderOpen, Plus, Search, MoreVertical, Trash2, FileText, X, Check, Calendar, FilePlus } from 'lucide-react';
 import CreateFolderModal from './ui/modals/CreateFolderModal';
 import AddDocumentModal from './ui/modals/AddDocumentModal';
-import { useCreateFolder } from '../hooks/useFolders';
+import { useCreateFolder, useFetchUserFolders } from '../hooks/useFolders';
 
 export interface Document {
   id: number;
@@ -11,11 +11,11 @@ export interface Document {
   wordCount: number;
 }
 
-interface FolderType {
-  id: number;
+export interface FolderType {
+  _id: number;
   name: string;
-  documentCount: number;
-  created: string;
+  documentIds: number[];
+  updatedAt: string;
   color: string;
   documents: Document[];
 }
@@ -26,50 +26,50 @@ interface ColorOption {
 }
 
 const FoldersPage: React.FC = () => {
-  const [folders, setFolders] = useState<FolderType[]>([
-    {
-      id: 1,
-      name: "Academic Papers",
-      documentCount: 5,
-      created: "2025-11-01",
-      color: "blue",
-      documents: [
-        { id: 1, name: "Differences of Opinion Amongst the Scholars", wordCount: 10862 },
-        { id: 2, name: "Research Methodology", wordCount: 8543 }
-      ]
-    },
-    {
-      id: 2,
-      name: "Project Documentation",
-      documentCount: 8,
-      created: "2025-10-15",
-      color: "green",
-      documents: [
-        { id: 3, name: "Project Python", wordCount: 25 },
-        { id: 4, name: "API Documentation", wordCount: 3421 }
-      ]
-    },
-    {
-      id: 3,
-      name: "Personal",
-      documentCount: 3,
-      created: "2025-09-20",
-      color: "purple",
-      documents: [
-        { id: 5, name: "Resume0", wordCount: 416 }
-      ]
-    },
-    {
-      id: 4,
-      name: "Travel & Tourism",
-      documentCount: 2,
-      created: "2025-11-10",
-      color: "orange",
-      documents: [
-        { id: 6, name: "VoyagePro", wordCount: 746 }
-      ]
-    }
-  ]);
+  // const [folders, setFolders] = useState<FolderType[]>([
+  //   {
+  //     id: 1,
+  //     name: "Academic Papers",
+  //     documentIds: [],
+  //     updatedAt: "2025-10-15",
+  //     color: "blue",
+  //     documents: [
+  //       { id: 1, name: "Differences of Opinion Amongst the Scholars", wordCount: 10862 },
+  //       { id: 2, name: "Research Methodology", wordCount: 8543 }
+  //     ]
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Project Documentation",
+  //     documentIds: [],
+  //     updatedAt: "2025-10-15",
+  //     color: "green",
+  //     documents: [
+  //       { id: 3, name: "Project Python", wordCount: 25 },
+  //       { id: 4, name: "API Documentation", wordCount: 3421 }
+  //     ]
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Personal",
+  //     documentIds: [],
+  //     updatedAt: "2025-10-15",
+  //     color: "purple",
+  //     documents: [
+  //       { id: 5, name: "Resume0", wordCount: 416 }
+  //     ]
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Travel & Tourism",
+  //     documentIds: [],
+  //     updatedAt: "2025-10-15",
+  //     color: "orange",
+  //     documents: [
+  //       { id: 6, name: "VoyagePro", wordCount: 746 }
+  //     ]
+  //   }
+  // ]);
 
   const [availableDocuments] = useState<Document[]>([
     { id: 7, name: "Marketing Strategy 2024", wordCount: 5421 },
@@ -102,24 +102,22 @@ const FoldersPage: React.FC = () => {
     createNewFolder.mutate(newFolderName)
     
     if (newFolderName.trim()) {
-      const newFolder: FolderType = {
-        id: Date.now(),
-        name: newFolderName,
-        documentCount: 0,
-        created: new Date().toISOString().split('T')[0],
-        color: selectedColor,
-        documents: []
-      };
-      setFolders([...folders, newFolder]);
+      // const newFolder: FolderType = {
+      //   id: Date.now(),
+      //   name: newFolderName,
+      //   color: selectedColor,
+      //   documents: []
+      // };
+      // setFolders([...folders, newFolder]);
       setNewFolderName("");
       setShowCreateModal(false);
     }
   };
 
   const deleteFolder = (folderId: number): void => {
-    if (confirm("Are you sure you want to delete this folder?")) {
-      setFolders(folders.filter(f => f.id !== folderId));
-    }
+    // if (confirm("Are you sure you want to delete this folder?")) {
+    //   setFolders(folders.filter(f => f.id !== folderId));
+    // }
   };
 
   const toggleExpandFolder = (folderId: number): void => {
@@ -141,37 +139,39 @@ const FoldersPage: React.FC = () => {
   };
 
   const addDocumentsToFolder = (): void => {
-    if (selectedFolder && selectedDocs.length > 0) {
-      const docsToAdd = availableDocuments.filter(doc => selectedDocs.includes(doc.id));
-      setFolders(folders.map(folder =>
-        folder.id === selectedFolder.id
-          ? {
-              ...folder,
-              documents: [...folder.documents, ...docsToAdd],
-              documentCount: folder.documentCount + docsToAdd.length
-            }
-          : folder
-      ));
-      setShowAddDocModal(false);
-      setSelectedDocs([]);
-    }
+    // if (selectedFolder && selectedDocs.length > 0) {
+    //   const docsToAdd = availableDocuments.filter(doc => selectedDocs.includes(doc.id));
+    //   setFolders(folders.map(folder =>
+    //     folder.id === selectedFolder.id
+    //       ? {
+    //           ...folder,
+    //           documents: [...folder.documents, ...docsToAdd],
+    //         }
+    //       : folder
+    //   ));
+    //   setShowAddDocModal(false);
+    //   setSelectedDocs([]);
+    // }
   };
 
-  const removeDocFromFolder = (folderId: number, docId: number): void => {
-    setFolders(folders.map(folder =>
-      folder.id === folderId
-        ? {
-            ...folder,
-            documents: folder.documents.filter(doc => doc.id !== docId),
-            documentCount: folder.documentCount - 1
-          }
-        : folder
-    ));
-  };
+  // const removeDocFromFolder = (folderId: number, docId: number): void => {
+  //   setFolders(folders.map(folder =>
+  //     folder.id === folderId
+  //       ? {
+  //           ...folder,
+  //           documents: folder.documents.filter(doc => doc.id !== docId),
+  //           documentCount: folder.documentIds.length - 1
+  //         }
+  //       : folder``
+  //   ));
+  // };
 
-  const filteredFolders = folders.filter(folder =>
+  const { data: userFolders = [] } = useFetchUserFolders();
+  const filteredFolders = userFolders?.filter(folder =>
     folder.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  )  ?? [];
+  
+  console.log(filteredFolders)
 
   return (
     <div className="flex-1 min-h-screen bg-linear-to-br from-slate-50 to-slate-100 p-8">
@@ -205,19 +205,19 @@ const FoldersPage: React.FC = () => {
 
         {/* Folders Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredFolders.map((folder) => (
+          {filteredFolders.map((folder: FolderType, idx) => (
             <div
-              key={folder.id}
+              key={idx}
               className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-all"
             >
               {/* Folder Header */}
-              <div className={`${colors.find(c => c.name === folder.color)?.class} p-4`}>
+              <div className={`bg-green-400 p-4`}>
                 <div className="flex items-start justify-between mb-2">
                   <div
                     className="cursor-pointer flex-1"
-                    onClick={() => toggleExpandFolder(folder.id)}
+                    onClick={() => toggleExpandFolder(folder._id)}
                   >
-                    {expandedFolder === folder.id ? (
+                    {expandedFolder === folder._id ? (
                       <FolderOpen className="w-8 h-8 text-white" />
                     ) : (
                       <Folder className="w-8 h-8 text-white" />
@@ -225,13 +225,13 @@ const FoldersPage: React.FC = () => {
                   </div>
                   <div className="relative">
                     <button
-                      onClick={() => setEditingFolder(editingFolder === folder.id ? null : folder.id)}
+                      onClick={() => setEditingFolder(editingFolder === folder._id ? null : folder._id)}
                       className="text-white hover:bg-white hover:text-black hover:bg-opacity-20 p-2 rounded-lg transition-colors"
                     >
                       <MoreVertical className="w-5 h-5" />
                     </button>
                     
-                    {editingFolder === folder.id && (
+                    {editingFolder === folder._id && (
                       <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-slate-200 py-2 z-10">
                         <button
                           onClick={() => {
@@ -245,7 +245,7 @@ const FoldersPage: React.FC = () => {
                         </button>
                         <button
                           onClick={() => {
-                            deleteFolder(folder.id);
+                            deleteFolder(folder._id);
                             setEditingFolder(null);
                           }}
                           className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
@@ -259,7 +259,7 @@ const FoldersPage: React.FC = () => {
                 </div>
                 <h3 className="text-white font-semibold text-lg mb-1">{folder.name}</h3>
                 <p className="text-white text-opacity-90 text-sm">
-                  {folder.documentCount} document{folder.documentCount !== 1 ? 's' : ''}
+                  {folder.documentIds.length} document{folder.documentIds.length !== 1 ? 's' : ''}
                 </p>
               </div>
 
@@ -267,24 +267,24 @@ const FoldersPage: React.FC = () => {
               <div className="p-4">
                 <div className="flex items-center gap-2 text-sm text-slate-500 mb-3">
                   <Calendar className="w-4 h-4" />
-                  <span>Created {folder.created}</span>
+                  <span>Created {new Date(folder.updatedAt).toDateString()}</span>
                 </div>
 
                 {/* Expanded View - Show Documents */}
-                {expandedFolder === folder.id && (
+                {expandedFolder === folder._id && (
                   <div className="mt-4 space-y-2">
-                    {folder.documents.length > 0 ? (
+                    {folder.documentIds.length > 0 ? (
                       folder.documents.map((doc) => (
                         <div
                           key={doc.id}
                           className="flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors"
                         >
                           <div className="flex items-center gap-2 flex-1 min-w-0">
-                            <FileText className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                            <FileText className="w-4 h-4 text-slate-400 shrink-0" />
                             <span className="text-sm text-slate-700 truncate">{doc.name}</span>
                           </div>
                           <button
-                            onClick={() => removeDocFromFolder(folder.id, doc.id)}
+                            // onClick={() => removeDocFromFolder(folder.id, doc.id)}
                             className="text-red-500 hover:text-red-600 ml-2"
                           >
                             <X className="w-4 h-4" />
