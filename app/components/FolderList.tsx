@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Folder, FolderOpen, Plus, Search, MoreVertical, Trash2, FileText, X, Check, Calendar, FilePlus } from 'lucide-react';
 import CreateFolderModal from './ui/modals/CreateFolderModal';
 import AddDocumentModal from './ui/modals/AddDocumentModal';
+import { useCreateFolder } from '../hooks/useFolders';
 
 export interface Document {
   id: number;
@@ -86,6 +87,7 @@ const FoldersPage: React.FC = () => {
   const [selectedColor, setSelectedColor] = useState<string>("blue");
   const [selectedDocs, setSelectedDocs] = useState<number[]>([]);
   const [editingFolder, setEditingFolder] = useState<number | null>(null);
+  const createNewFolder = useCreateFolder()
 
   const colors: ColorOption[] = [
     { name: "blue", class: "bg-blue-500" },
@@ -97,6 +99,8 @@ const FoldersPage: React.FC = () => {
   ];
 
   const createFolder = (): void => {
+    createNewFolder.mutate(newFolderName)
+    
     if (newFolderName.trim()) {
       const newFolder: FolderType = {
         id: Date.now(),
@@ -222,7 +226,7 @@ const FoldersPage: React.FC = () => {
                   <div className="relative">
                     <button
                       onClick={() => setEditingFolder(editingFolder === folder.id ? null : folder.id)}
-                      className="text-white hover:bg-white hover:bg-opacity-20 p-2 rounded-lg transition-colors"
+                      className="text-white hover:bg-white hover:text-black hover:bg-opacity-20 p-2 rounded-lg transition-colors"
                     >
                       <MoreVertical className="w-5 h-5" />
                     </button>
