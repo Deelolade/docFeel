@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Folder, FolderOpen, Plus, Search, MoreVertical, Trash2, FileText, X, Calendar, FilePlus } from 'lucide-react';
 import CreateFolderModal from './ui/modals/CreateFolderModal';
 import AddDocumentModal from './ui/modals/AddDocumentModal';
-import { useCreateFolder, useDeleteFolder, useFetchUserFolders } from '../hooks/useFolders';
+import { useAddDocumentToFolder, useCreateFolder, useDeleteFolder, useFetchUserFolders } from '../hooks/useFolders';
 import { useDocumentStore } from '../store/documentStore';
 
 export interface Document {
@@ -42,6 +42,7 @@ const FoldersPage: React.FC = () => {
   const [editingFolder, setEditingFolder] = useState<string | null>(null);
   const createNewFolder = useCreateFolder()
   const deleteOldFolder = useDeleteFolder()
+  const addDocuments  = useAddDocumentToFolder()
   const {documents } = useDocumentStore();
   console.log(documents)
   const colors: ColorOption[] = [
@@ -94,19 +95,8 @@ const FoldersPage: React.FC = () => {
   };
 
   const addDocumentsToFolder = (): void => {
-    // if (selectedFolder && selectedDocs.length > 0) {
-    //   const docsToAdd = availableDocuments.filter(doc => selectedDocs.includes(doc.id));
-    //   setFolders(folders.map(folder =>
-    //     folder.id === selectedFolder.id
-    //       ? {
-    //           ...folder,
-    //           documents: [...folder.documents, ...docsToAdd],
-    //         }
-    //       : folder
-    //   ));
-    //   setShowAddDocModal(false);
-    //   setSelectedDocs([]);
-    // }
+   console.log('Adding documents', selectedDocs, 'to folder', selectedFolder);
+   addDocuments.mutate({ folderId: selectedFolder?._id || '', documentIds: selectedDocs})
   };
 
   // const removeDocFromFolder = (folderId: number, docId: number): void => {
@@ -296,7 +286,7 @@ const FoldersPage: React.FC = () => {
         addDocumentsToFolder={addDocumentsToFolder}
         setShowAddDocModal={setShowAddDocModal}
         />
-      )}
+   )}
     </div>
   );
 };

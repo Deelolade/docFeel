@@ -17,7 +17,10 @@ const deleteFolder =  async (id:string)=>{
     const res = await axios.delete(`${API_URL}/folders/delete/${id}`, { withCredentials: true });
     return res.data;
 }
-
+const addDocumentsToFolder =  async (folderId:string, documentIds:string[])=>{
+    const res = await axios.post(`${API_URL}/folders/${folderId}/add-documents`, { documentIds}, { withCredentials: true });
+    return res.data;
+}
 export const useCreateFolder = () =>{
     const queryClient = useQueryClient();
     return useMutation({
@@ -60,6 +63,24 @@ export const useDeleteFolder = () =>{
                     console.log(error?.response)
                     const message =
                         error?.response?.data?.message || 'Failed to create folder. Please try again.';
+                    toast.error(message);
+                },
+    })
+}
+
+export const useAddDocumentToFolder = () =>{
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ folderId, documentIds}:{ folderId: string; documentIds: string[] }) => addDocumentsToFolder(folderId, documentIds),
+        onSuccess: (data) => {
+            console.log(data)
+            queryClient.invalidateQueries({ queryKey: ['userFolders'] });
+                    toast.success(data.message || 'Document added successfully!');
+                },
+                onError: (error: any) => {
+                    console.log(error?.response)
+                    const message =
+                        error?.response?.data?.message || 'Failed to add document to folder. Please try again.';
                     toast.error(message);
                 },
     })
