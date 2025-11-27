@@ -2,14 +2,13 @@
 
 
 import { useRouter } from "next/navigation"
-import Loading from "./ui/Loading"
-import { useDocuments } from "@/app/hooks/useDocuments"
-import { BarChart3, Clock, Eye, FileText, Folder, Upload } from "lucide-react"
+import {  Clock, Eye, FileText, } from "lucide-react"
 import UploadDocument from "./UploadDocument"
+import { useDocumentStore } from "../store/documentStore"
 
 const UploadedDocumentList = () => {
     const route = useRouter();
-    const { data: documents, isLoading, isError } = useDocuments();
+    const {documents}= useDocumentStore()
 
     const handleViewDocument = (id: string) => {
         route.push(`documents/${id}`);
@@ -19,7 +18,6 @@ const UploadedDocumentList = () => {
             <div className="mt-4 flex-1 px-6">
                 <UploadDocument />
                 {/* {isError && <p className="text-lg text-red-500 absolute top-1/2 left-1/2">error loading page</p>} */}
-                {isLoading && <Loading />}
                 <div className="mt-4 rounded-2xl  py-2 ">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-2xl font-bold">Recent Activity</h2>

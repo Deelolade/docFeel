@@ -41,18 +41,9 @@ const FoldersPage: React.FC = () => {
   const {documents } = useDocumentStore();
   const removeDocuments =useRemoveDocumentFromFolder();
 
-  //  const [availableDocuments] = documents;
   const createFolder = (): void => {
-    createNewFolder.mutate(newFolderName)
-    
     if (newFolderName.trim()) {
-      // const newFolder: FolderType = {
-      //   id: Date.now(),
-      //   name: newFolderName,
-      //   color: selectedColor,
-      //   documents: []
-      // };
-      // setFolders([...folders, newFolder]);
+      createNewFolder.mutate(newFolderName)
       setNewFolderName("");
       setShowCreateModal(false);
     }
