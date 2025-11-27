@@ -30,7 +30,7 @@ const handleSummarizeDocument = async (id: string) => {
     return res.data;
 };
 const handleUpdateDocument = async ({id, fileName} : updateDocument) => {
-    const res = await axios.patch(`${API_URL}/document/update/${id}`,{ fileName }, { withCredentials: true });
+    const res = await axios.put(`${API_URL}/document/update/${id}`,{ fileName }, { withCredentials: true });
     return res.data;
 };
 
@@ -69,9 +69,9 @@ export const useDocuments = () => {
     return useQuery<UploadedDocument[]>({
         queryKey: ['documents'],
         queryFn: handleFetchAllUserDocuments,
-        staleTime: 0,
-        refetchOnMount: 'always',
-        refetchOnWindowFocus: true
+        staleTime: 5 * 60 * 1000, 
+        refetchOnMount: false,
+        refetchOnWindowFocus: false
     })
 }
 

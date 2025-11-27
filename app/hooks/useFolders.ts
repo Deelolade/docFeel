@@ -32,7 +32,8 @@ export const useCreateFolder = () => {
         mutationFn: (name: string) => CreateNewFolder(name),
         onSuccess: (data) => {
             console.log(data)
-            queryClient.invalidateQueries({ queryKey: ['userFolders'] });
+            queryClient.refetchQueries({ queryKey: ['userFolders'], exact: true });
+            queryClient.refetchQueries({ queryKey: ['totalFolders'], exact: true });
             toast.success(data.message || 'Folder created successfully!');
         },
         onError: (error: any) => {
@@ -61,7 +62,8 @@ export const useDeleteFolder = () => {
         mutationFn: (id: string) => deleteFolder(id),
         onSuccess: (data) => {
             console.log(data)
-            queryClient.invalidateQueries({ queryKey: ['userFolders'] });
+            queryClient.refetchQueries({ queryKey: ['userFolders'], exact: true });
+            queryClient.refetchQueries({ queryKey: ['totalFolders'], exact: true });
             toast.success(data.message || 'Folder created successfully!');
         },
         onError: (error: any) => {

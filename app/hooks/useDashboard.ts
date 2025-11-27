@@ -24,14 +24,14 @@ export const useDashboardData = () => {
             {
                 queryKey: ['totalFolders'],
                 queryFn: () => getTotalFolders(),
-                staleTime: Infinity,
+                staleTime: 0,
                 refetchOnMount: false,
                 refetchOnWindowFocus: false,
             },
             {
                 queryKey: ['totalUploads'],
                 queryFn: () => getTotalDocuments(),
-                staleTime: Infinity,
+                staleTime: 0,
                 refetchOnMount: false,
                 refetchOnWindowFocus: false,
             },

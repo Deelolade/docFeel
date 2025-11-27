@@ -17,8 +17,7 @@ const UploadedDocumentList = () => {
         <>
             <div className="mt-4 flex-1 px-6">
                 <UploadDocument />
-                {/* {isError && <p className="text-lg text-red-500 absolute top-1/2 left-1/2">error loading page</p>} */}
-                <div className="mt-4 rounded-2xl  py-2 ">
+                <div className="mt-4 rounded-2xl py-2 ">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-2xl font-bold">Recent Activity</h2>
                         <div className="flex items-center gap-2 text-slate-400 text-sm">
@@ -98,7 +97,6 @@ const UploadedDocumentList = () => {
                 </div>
             </div>
         </>
-
     )
 }
 
