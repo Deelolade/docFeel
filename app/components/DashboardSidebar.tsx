@@ -1,7 +1,7 @@
 "use client"
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useUser } from '../hooks/useUser'
+import { useLogOutUser, useUser } from '../hooks/useUser'
 import Loading from './ui/Loading'
 import { HiOutlineDotsVertical, HiOutlineUserCircle } from 'react-icons/hi'
 import { FiFolder, FiLogOut } from 'react-icons/fi'
@@ -15,6 +15,7 @@ const DashboardSidebar = () => {
     const currentUser = { ...user };
     const pathName = usePathname();
     const [menuOpen, setMenuOpen] = useState(false);
+    const logOutUser = useLogOutUser();
 
     // Base styling for all links
     const linkBaseClasses = "w-full p-3 rounded-lg my-2 flex items-center text-white font-medium transition duration-150 ease-in-out";
@@ -80,6 +81,7 @@ const DashboardSidebar = () => {
                 {menuOpen && (
                     <div ref={menuRef} className="absolute right-4 bottom-10 mt-2 w-48 bg-slate-800 shadow-lg rounded-lg py-2 z-20">
                         <button
+                            onClick={() => logOutUser.mutate()}
                             className="flex items-center px-4 py-2 text-red-400 hover:text-red-300 hover:bg-red-900/20 w-full text-left"
                         >
                             <FiLogOut className="mr-2" />
