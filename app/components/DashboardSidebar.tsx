@@ -8,7 +8,8 @@ import { FiFolder, FiLogOut } from 'react-icons/fi'
 import { FaRegCaretSquareUp } from 'react-icons/fa'
 import { PiSquaresFourBold } from 'react-icons/pi'
 import { useEffect, useRef, useState } from 'react'
-
+import { useUserStore } from '../store/userStore'
+// import { useUser } from '@/app/store/userStore'
 
 const DashboardSidebar = () => {
     const { data: user, isLoading } = useUser();
@@ -16,6 +17,7 @@ const DashboardSidebar = () => {
     const pathName = usePathname();
     const [menuOpen, setMenuOpen] = useState(false);
     const logOutUser = useLogOutUser();
+    const logOut = useUserStore(state => state.logOut);
 
     // Base styling for all links
     const linkBaseClasses = "w-full p-3 rounded-lg my-2 flex items-center text-white font-medium transition duration-150 ease-in-out";
@@ -42,6 +44,10 @@ const DashboardSidebar = () => {
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+    const handleLogOut = () => {
+        logOutUser.mutate();
+        logOut();
+    }
     return (
         <aside className='w-1/5 bg-slate-900 min-h-screen p-6 flex flex-col justify-between text-[#EFF6FF]'>
             {isLoading && <Loading />}
@@ -81,7 +87,7 @@ const DashboardSidebar = () => {
                 {menuOpen && (
                     <div ref={menuRef} className="absolute right-4 bottom-10 mt-2 w-48 bg-slate-800 shadow-lg rounded-lg py-2 z-20">
                         <button
-                            onClick={() => logOutUser.mutate()}
+                            onClick={handleLogOut}
                             className="flex items-center px-4 py-2 text-red-400 hover:text-red-300 hover:bg-red-900/20 w-full text-left"
                         >
                             <FiLogOut className="mr-2" />

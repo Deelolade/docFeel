@@ -11,11 +11,11 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { LuEye, LuEyeOff } from "react-icons/lu";
-import { useUser } from '@/app/store/userStore';
+import { useUserStore } from '@/app/store/userStore';
 import ButtonLoading from '@/app/components/ui/ButtonLoading';
 
 const page = () => {
-    const { setUser } = useUser();
+    const { setUser } = useUserStore();
     const router = useRouter();
     const [loading, setLoading] = useState<boolean>(false)
     const [passwordType, setPasswordType] = useState<boolean>(false);
@@ -31,11 +31,11 @@ const page = () => {
                     withCredentials: true 
                 }
             );
+            router.push('/dashboard')
             toast.success(res.data.message || "Signed in successfully");
             console.log(res.data.user)
             setUser(res.data.user)
             setLoading(false)
-            router.push('/dashboard')
         }
         catch (error) {
             const err = error as AxiosError<{ message: string }>

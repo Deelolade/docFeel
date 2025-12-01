@@ -17,7 +17,7 @@ type UserStore = {
     logOut: () => void;
 };
 
-export const useUser = create<UserStore>()(
+export const useUserStore = create<UserStore>()(
     persist(
         (set) => ({
             user: null,

@@ -1,12 +1,12 @@
 "use client"
 
-import { useUser } from "../store/userStore";
+import { useUserStore } from "../store/userStore";
 import DashboardList from "./DashboardList";
 import { DashboardStats } from "./DashboardStats";
 
 
 const DashboardMain = () => {
-    const { user } = useUser();
+    const { user } = useUserStore();
     const currentUser = { ...user };
     
 

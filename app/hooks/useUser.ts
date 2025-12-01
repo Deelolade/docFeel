@@ -25,9 +25,10 @@ export const useLogOutUser = () => {
   return useMutation({
     mutationFn: logOutUser,
     onSuccess:()=>{
-      toast.success("Logged out successfully");
       window.location.href = '/signin';
-
+      toast.success("Logged out successfully");
+    }, onError:()=>{
+      toast.error("Failed to log out");
     }
   })
 }
