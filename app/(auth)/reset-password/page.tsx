@@ -9,10 +9,11 @@ import axios, { AxiosError } from 'axios';
 import { API_URL } from '@/app/config/env';
 import { toast } from 'react-toastify';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import {  useState } from 'react';
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import ButtonLoading from '@/app/components/ui/ButtonLoading';
 import { resetPasswordFormType, resetPasswordSchema } from '@/app/schemas/authSchema';
+import { useResetPassword } from '@/app/hooks/useUser';
 
 
 const page = () => {
@@ -22,6 +23,7 @@ const page = () => {
     const [loading, setLoading] = useState(false);
     const [passwordType, setPasswordType] = useState(false);
     const [confirmPasswordType, setConfirmPasswordType] = useState(false);
+    const resetPassword = useResetPassword(token || '');
     console.log(token)
     const {
         register,
@@ -36,31 +38,7 @@ const page = () => {
             toast.error("Invalid or missing reset token");
             return;
         }
-
-        setLoading(true);
-        try {
-            const res = await axios.post(
-                `${API_URL}/auth/reset-password`,
-                {
-                    token,
-                    newPassword: data.password
-                },
-                { withCredentials: true }
-            );
-
-            toast.success(res.data.message || "Password reset successfully");
-
-            setTimeout(() => {
-                router.push('/signin');
-            }, 2000);
-
-        } catch (error) {
-            const err = error as AxiosError<{ message: string }>;
-            console.log('error:', error);
-            toast.error(err?.response?.data.message || "Something went wrong");
-        } finally {
-            setLoading(false);
-        }
+       resetPassword.mutate({ token, newPassword: data.password });
     };
 
     return (
