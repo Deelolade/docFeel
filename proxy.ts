@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export const middleware = (req: NextRequest)=>{
+export const proxy = (req: NextRequest)=>{
     const token = req.cookies.get("access_token")?.value;
      // Protected routes
   const protectedRoutes = ["/dashboard", "/documents", "/profile", "/chat", "/folders"];

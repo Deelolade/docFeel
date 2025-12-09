@@ -62,7 +62,7 @@ const HeroSection = ({opacityProgress,scaleProgress } : HeroSectionType) => {
                 animate={{ scale: [1, 1.5, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
-              <span className="text-sm font-medium">🚀 AI-Powered Document Analysis</span>
+              <span className="text-sm font-medium"> AI-Powered Document Analysis</span>
             </motion.div>
             
             <motion.h1 
@@ -140,9 +140,9 @@ const HeroSection = ({opacityProgress,scaleProgress } : HeroSectionType) => {
                 { value: "10x", label: "Faster Analysis" },
                 { value: "99.9%", label: "Accuracy" },
                 { value: "50K+", label: "Documents" }
-              ].map((stat, i) => (
+              ].map((stat, idx) => (
                 <motion.div 
-                  key={i}
+                  key={idx}
                   className="text-center"
                   whileHover={{ scale: 1.1, y: -5 }}
                   transition={{ type: "spring", stiffness: 300 }}
@@ -151,7 +151,7 @@ const HeroSection = ({opacityProgress,scaleProgress } : HeroSectionType) => {
                     className="text-5xl font-bold mb-1"
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 1 + i * 0.1, type: "spring" }}
+                    transition={{ delay: 1 + idx * 0.1, type: "spring" }}
                   >
                     {stat.value}
                   </motion.div>

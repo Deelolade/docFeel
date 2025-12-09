@@ -50,7 +50,7 @@ const CTASection = () => {
                 Schedule Demo
               </motion.button>
             </div>
-            <p className="text-neutral-500 mt-10">No credit card required • Free forever plan available</p>
+            <p className="text-neutral-500 mt-10">No credit card required for now  • Free forever available</p>
           </motion.div>
         </div>
       </section>

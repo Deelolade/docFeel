@@ -24,7 +24,6 @@ const Navbar = ({scrolled}:NavbarType) => {
                 animate={{ rotate: [0, -10, 10, -10, 0] }}
                 transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
               >
-                <FcDocument/>
               </motion.span>
               DocFeel
             </motion.div>
