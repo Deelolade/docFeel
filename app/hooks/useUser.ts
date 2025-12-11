@@ -68,9 +68,7 @@ export const useSignInUser = () => {
         console.log(data)
         toast.success(data.message || "Signed in successfully");
         setUser(data)
-         setTimeout(() => {
-        router.push("/dashboard");
-      }, 50);
+        router.push('/dashboard');
       }, onError: (error: any) => {
         console.log(error?.response?.data?.message )
         toast.error(error?.response?.data?.message  || "Failed to sign in");
