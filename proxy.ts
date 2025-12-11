@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const proxy = (req: NextRequest)=>{
     const token = req.cookies.get("access_token")?.value;
+    console.log("Token from cookie:", req.cookies.get("access_token")?.value);
      // Protected routes
   const protectedRoutes = ["/dashboard", "/documents", "/profile", "/chat", "/folders"];
 
@@ -20,6 +21,7 @@ export const proxy = (req: NextRequest)=>{
   return NextResponse.next();
 
 }
+
 
 
 export const config = {
