@@ -23,12 +23,12 @@ const DashboardList = () => {
   };
   return (
     <>
-      <div className="mt-4 flex-1 px-4">
+      <div className="mt-4 flex-1 lg:px-4">
         {/* {isError && <p className="text-lg text-red-500 absolute top-1/2 left-1/2">error loading page</p>} */}
         {isLoading && <Loading />}
         <div className="mt-4 rounded-2xl  py-2 ">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold">Recent Activity</h2>
+            <h2 className="text-lg lg:text-2xl font-bold">Recent Activity</h2>
             <div className="flex items-center gap-2 text-slate-400 text-sm">
               <Clock className="w-4 h-4" />
               <span>Last 30 days</span>

@@ -51,7 +51,7 @@ const DashboardSidebar = () => {
         clearStore()
     }
     return (
-        <aside className='w-1/5 bg-slate-900 min-h-screen p-6 flex flex-col justify-between text-[#EFF6FF]'>
+        <aside className='w-1/5 bg-slate-900 min-h-screen p-6 hidden md:flex flex-col justify-between text-[#EFF6FF] '>
             {isLoading && <Loading />}
 
             <div className="">
