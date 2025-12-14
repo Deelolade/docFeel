@@ -2,13 +2,14 @@
 
 
 import { useRouter } from "next/navigation"
-import {  Clock, Eye, FileText, } from "lucide-react"
+import { Clock, Eye, FileText, } from "lucide-react"
 import UploadDocument from "./UploadDocument"
 import { useDocumentStore } from "../store/documentStore"
+import DashboardMobileNav from "./DashboardMobileNav"
 
 const UploadedDocumentList = () => {
     const route = useRouter();
-    const {documents}= useDocumentStore()
+    const { documents } = useDocumentStore()
 
     const handleViewDocument = (id: string) => {
         route.push(`documents/${id}`);
@@ -16,6 +17,10 @@ const UploadedDocumentList = () => {
     return (
         <>
             <div className="mt-4 flex-1 px-6">
+                <header className="flex justify-between">
+                    <h1 className="text-lg lg:text-2xl font-bold">Uploads</h1>
+                    <DashboardMobileNav />
+                </header>
                 <UploadDocument />
                 <div className="mt-4 rounded-2xl py-2 ">
                     <div className="flex items-center justify-between mb-6">

@@ -33,7 +33,7 @@ const DashboardMobileNav = () => {
     ]
 
     return (
-        <div onClick={() => setSidebarOpen(!sidebarOpen)}>
+        <div onClick={() => setSidebarOpen(!sidebarOpen)}  className='lg:hidden'>
             {sidebarOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             {sidebarOpen && (
                 <div className="fixed inset-0 bg-black/40 z-40 lg:hidden" onClick={() => setSidebarOpen(false)}>

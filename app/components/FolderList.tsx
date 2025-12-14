@@ -6,6 +6,7 @@ import AddDocumentModal from './ui/modals/AddDocumentModal';
 import { useAddDocumentToFolder, useCreateFolder, useDeleteFolder, useFetchUserFolders, useRemoveDocumentFromFolder } from '../hooks/useFolders';
 import { useDocumentStore } from '../store/documentStore';
 import Loading from './ui/Loading';
+import DashboardMobileNav from './DashboardMobileNav';
 
 export interface Document {
   _id: string;
@@ -37,9 +38,9 @@ const FoldersPage: React.FC = () => {
   const [editingFolder, setEditingFolder] = useState<string | null>(null);
   const createNewFolder = useCreateFolder()
   const deleteOldFolder = useDeleteFolder()
-  const addDocuments  = useAddDocumentToFolder()
-  const {documents } = useDocumentStore();
-  const removeDocuments =useRemoveDocumentFromFolder();
+  const addDocuments = useAddDocumentToFolder()
+  const { documents } = useDocumentStore();
+  const removeDocuments = useRemoveDocumentFromFolder();
 
   const createFolder = (): void => {
     if (newFolderName.trim()) {
@@ -51,7 +52,7 @@ const FoldersPage: React.FC = () => {
 
   const deleteFolder = (folderId: string): void => {
     deleteOldFolder.mutate(folderId)
-    
+
   };
 
   const toggleExpandFolder = (folderId: string): void => {
@@ -73,8 +74,8 @@ const FoldersPage: React.FC = () => {
   };
 
   const addDocumentsToFolder = (): void => {
-   console.log('Adding documents', selectedDocs, 'to folder', selectedFolder);
-   addDocuments.mutate({ folderId: selectedFolder?._id || '', documentIds: selectedDocs})
+    console.log('Adding documents', selectedDocs, 'to folder', selectedFolder);
+    addDocuments.mutate({ folderId: selectedFolder?._id || '', documentIds: selectedDocs })
   };
 
   const removeDocFromFolder = (folderId: string, docId: string): void => {
@@ -85,27 +86,30 @@ const FoldersPage: React.FC = () => {
   const { data: userFolders = [], isLoading } = useFetchUserFolders();
   const filteredFolders = userFolders?.filter(folder =>
     folder.name.toLowerCase().includes(searchQuery.toLowerCase())
-  )  ?? [];
-  
+  ) ?? [];
+
 
   return (
     <div className="flex-1 min-h-screen bg-linear-to-br from-slate-50 to-slate-100 p-8">
-      {isLoading && <Loading/>}
+      {isLoading && <Loading />}
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold text-slate-800 mb-2">Folders</h1>
-            <p className="text-slate-600">Organize your documents into folders</p>
+        <header className='flex justify-between items-start'>
+          <div className="mb-8 flex flex-col lg:flex-row  items-start gap-4 lg:items-center justify-between">
+            <div>
+              <h1 className="text-lg lg:text-4xl font-bold text-slate-800 mb-2">Folders</h1>
+              <p className="text-slate-600 text-sm">Organize your documents into folders</p>
+            </div>
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-md hover:shadow-lg"
+            >
+              <Plus className="w-5 h-5" />
+              Create Folder
+            </button>
           </div>
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-md hover:shadow-lg"
-          >
-            <Plus className="w-5 h-5" />
-            Create Folder
-          </button>
-        </div>
+          <DashboardMobileNav />
+        </header>
 
         {/* Search Bar */}
         <div className="mb-6 relative">
@@ -146,7 +150,7 @@ const FoldersPage: React.FC = () => {
                     >
                       <MoreVertical className="w-5 h-5" />
                     </button>
-                    
+
                     {editingFolder === folder._id && (
                       <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-slate-200 py-2 z-10">
                         <button
@@ -210,7 +214,7 @@ const FoldersPage: React.FC = () => {
                     ) : (
                       <p className="text-sm text-slate-400 text-center py-4">No documents yet</p>
                     )}
-                    
+
                     <button
                       onClick={() => openAddDocModal(folder)}
                       className="w-full mt-2 py-2 border-2 border-dashed border-slate-300 rounded-lg text-slate-500 hover:border-slate-400 hover:text-slate-600 text-sm font-medium transition-colors"
@@ -236,25 +240,25 @@ const FoldersPage: React.FC = () => {
 
       {/* Create Folder Modal */}
       {showCreateModal && (
-        <CreateFolderModal 
-        newFolderName={newFolderName}
-         setNewFolderName={setNewFolderName}
-         setShowCreateModal={setShowCreateModal}
-         createFolder={createFolder}
-         />
+        <CreateFolderModal
+          newFolderName={newFolderName}
+          setNewFolderName={setNewFolderName}
+          setShowCreateModal={setShowCreateModal}
+          createFolder={createFolder}
+        />
       )}
 
       {/* Add Documents Modal */}
       {showAddDocModal && (
         <AddDocumentModal
-        selectedFolder={selectedFolder}
-        availableDocuments={documents}
-        toggleDocSelection={toggleDocSelection}
-        selectedDocs={selectedDocs}
-        addDocumentsToFolder={addDocumentsToFolder}
-        setShowAddDocModal={setShowAddDocModal}
+          selectedFolder={selectedFolder}
+          availableDocuments={documents}
+          toggleDocSelection={toggleDocSelection}
+          selectedDocs={selectedDocs}
+          addDocumentsToFolder={addDocumentsToFolder}
+          setShowAddDocModal={setShowAddDocModal}
         />
-   )}
+      )}
     </div>
   );
 };
