@@ -27,7 +27,7 @@ const DashboardSidebar = () => {
     const clearStore = useDocumentStore(state => state.clearStore);
 
     // Base styling for all links
-    const linkBaseClasses = "w-full lg:w-full p-2 lg:p-3 rounded-lg my-2 flex items-center text-white font-medium transition duration-150 ease-in-out ";
+    const linkBaseClasses = "lg:w-full p-2 lg:p-3  rounded-lg my-2 flex justify-center items-center text-white font-medium transition duration-150 ease-in-out ";
     const activeClass = "bg-gray-700";
     const inactiveClass = "hover:bg-gray-800";
 
@@ -75,10 +75,10 @@ const DashboardSidebar = () => {
     ]
      
     return (
-        <aside className='w-16 lg:w-1/5 bg-slate-900 min-h-screen h-screen px-1 lg:p-6 py-3 hidden md:flex flex-col justify-between text-[#EFF6FF] '>
+        <aside className='w-16 lg:w-1/5 bg-slate-900 min-h-screen h-screen px-2 lg:p-6 py-3 hidden md:flex flex-col justify-between text-[#EFF6FF] '>
             {isLoading && <Loading />}
 
-            <div className="">
+            <div className="md:pt-3 lg:pt-0">
                 <div className=" flex justify-between items-end pb-4 border-b border-slate-800">
                     <h3 className='text-2xl font-semibold mt-3 text-[#EFF6FF] hidden lg:inline'>DocFeel</h3>
                     <p className='text-sm font-semibold text-center lg:text-right'>{currentUser?.trialCount || 0} / 5 trials</p>
@@ -89,7 +89,7 @@ const DashboardSidebar = () => {
                              const Icon = navlinks.icon
                             return(
                                 <Link href={`/${navlinks.link}`} key={idx} className={`${getLinkClasses(`/${navlinks.link}`)} group relative`}>
-                        <Icon className="h-6 w-6 md:size-8 md:mr-0 lg:mr-3 " />
+                        <Icon className="h-6 w-6 md:size-8  " />
                         <span className="hidden lg:inline">{navlinks.label}</span>
                         <span className="pointer-events-none
       absolute left-full top-1/2 -translate-y-1/2 ml-3
