@@ -34,13 +34,13 @@ const UploadedDocumentList = () => {
                             <span>Last 30 days</span>
                         </div>
                     </div>
-                    <div className="grid grid-cols-1  gap-6 overflow-y-auto max-h-[60vh]">
+                    <div className="grid grid-cols-1  gap-6 overflow-y-auto max-h-[60vh] ">
                         {documents && documents?.length > 0 ? (documents.map((doc, idx) => (
                             <div
                                 key={idx}
                                 className="bg-white rounded-2xl p-6 border border-slate-200 hover:border-slate-300 transition-all hover:shadow-lg"
                             >
-                                <div className="flex items-start justify-between mb-4">
+                                <div className="flex items-start justify-between mb-2 lg:mb-4">
                                     <div className="flex-1">
                                         <div className="flex items-center gap-2 mb-2">
                                             <span className="px-3 py-1 bg-slate-100 rounded-full text-xs font-medium text-slate-600">
@@ -52,17 +52,17 @@ const UploadedDocumentList = () => {
                                             {doc.fileName}
                                         </h3>
 
-                                        <p className="text-slate-600 text-sm line-clamp-2 mb-4">
+                                        <p className="text-slate-600 text-sm line-clamp-2 mb-2 lg:mb-4">
                                             {doc.summary}
                                         </p>
                                     </div>
                                 </div>
 
-                                <div className="flex items-center justify-between pt-4 border-t border-slate-200">
-                                    <div className="flex items-center gap-4 text-sm text-slate-600">
+                                <div className="flex flex-col sm:flex-row gap-3  items-center justify-between pt-4 border-t border-slate-200">
+                                    <div className="flex sm:items-center justify-between w-full sm:w-auto gap-4 text-sm text-slate-600">
                                         <div className="flex items-center gap-1">
                                             <FileText className="w-4 h-4 text-slate-500" />
-                                            <span>{doc.wordCount.toLocaleString()} words</span>
+                                            <span className="text-sm">{doc.wordCount.toLocaleString()} words</span>
                                         </div>
 
                                         <div className="flex items-center gap-1">
