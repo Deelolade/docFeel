@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { API_URL } from "../config/env";
 import { useParams } from "next/navigation";
-import { useChats } from "../hooks/useChat";
+import { useGetPreviousChats, useSendMessage } from "../hooks/useChat";
 import { useQueryClient } from "@tanstack/react-query";
 import { FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/navigation"
@@ -21,10 +21,11 @@ export default function ChatPage() {
   console.log(id)
   const route = useRouter()
   const [input, setInput] = useState("");
-  const { data: savedMessages = [], isLoading, isError } = useChats(id)
+  const { data: savedMessages = [], isLoading, isError } = useGetPreviousChats(id)
   const queryClient = useQueryClient()
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const  {currentDocument}= useDocumentStore()
+  const sendChatMessage = useSendMessage(id)
   console.log(currentDocument)
   // Local optimistic messages (only unsaved ones)
   // const [pendingMessages, setPendingMessages] = useState<Message[]>([]);
@@ -42,18 +43,19 @@ export default function ChatPage() {
     if (!input.trim() || isSending) return;
 
     setInput("");
-    setIsSending(true);
+    // setIsSending(true);
+    sendChatMessage.mutate(input)
 
-    try {
-      const res = await axios.post(`${API_URL}/document/chat/${id}`, {
-        message: input.trim(),
-      }, { withCredentials: true });
-      queryClient.invalidateQueries({ queryKey: ['chat', id] })
-    } catch (err) {
-      console.log(err)
-    } finally {
-      setIsSending(false);
-    }
+    // try {
+    //   const res = await axios.post(`${API_URL}/document/chat/${id}`, {
+    //     message: input.trim(),
+    //   }, { withCredentials: true });
+    //   queryClient.invalidateQueries({ queryKey: ['chat', id] })
+    // } catch (err) {
+    //   console.log(err)
+    // } finally {
+    //   setIsSending(false);
+    // }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) =>
@@ -63,7 +65,7 @@ export default function ChatPage() {
   }
   return (
     <section className="flex-1 max-h-screen h-screen">
-      <div className="bg-white/10 h-18 absolute w-[80%] shadow-2xl backdrop-blur-xl p-5 flex items-center">
+      <div className="bg-white/10 h-18 absolute w-full shadow-sm backdrop-blur-xl p-5 flex items-center">
         <button className="hover:bg-gray-300 p-2 rounded-md" onClick={() => returnToDocument(id)}><FaArrowLeft className="scale-125" /></button>
         <h1 className="text-lg font-semibold ml-4">{currentDocument?.fileName}</h1>
       </div>
@@ -92,7 +94,7 @@ export default function ChatPage() {
               <p className="text-sm mt-2">Start the conversation by typing below!</p>
             </div>)}
 
-          {isSending && (
+          {sendChatMessage.isPending && (
             <div className="text-gray-600 text-sm italic">AI is typing…</div>
           )}
 
@@ -111,7 +113,7 @@ export default function ChatPage() {
             />
             <button
               onClick={sendMessage}
-              disabled={isSending}
+              disabled={sendChatMessage.isPending}
               className="px-4 py-2 rounded-lg bg-slate-800 text-white disabled:bg-slate-5 00"
             >
               Send

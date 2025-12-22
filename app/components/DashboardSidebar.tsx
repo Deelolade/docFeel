@@ -83,13 +83,13 @@ const DashboardSidebar = () => {
                                 <Link href={`/${navlinks.link}`} key={idx} className={`${getLinkClasses(pathName, `/${navlinks.link}`)} group relative`}>
                                     <Icon className="h-6 w-6 md:size-8  " />
                                     <span className="hidden lg:inline">{navlinks.label}</span>
-                                    <span className="pointer-events-none
+                                    {/* <span className="pointer-events-none
       absolute left-full top-1/2 -translate-y-1/2 ml-3
       whitespace-nowrap
       rounded-md bg-slate-900 px-3 py-1 text-sm text-white
       opacity-0 scale-95
       transition-all duration-200 
-      group-hover:opacity-100 group-hover:scale-100">{navlinks.label}</span>
+      group-hover:opacity-100 group-hover:scale-100">{navlinks.label}</span> */}
                                 </Link>
                             )
                         })
@@ -98,7 +98,7 @@ const DashboardSidebar = () => {
             </div>
 
 
-            <div className=" relative flex items-center justify-center lg:justify-between mt-8 pt-4 border-t border-slate-800">
+            <div className=" relative flex items-center justify-center lg:justify-between mt-8 px-3 pt-4 border-t border-slate-800">
                 <div className="hidden lg:flex items-center space-x-3 ">
                     {/* <HiOutlineUserCircle className='text-5xl ' /> */}
                     <div className="">

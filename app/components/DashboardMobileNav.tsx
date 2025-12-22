@@ -89,8 +89,8 @@ const DashboardMobileNav = () => {
                                 }
                             </ul>
                         </div>
-                        <div className=" relative flex items-center justify-center lg:justify-between mt-8 pt-4 border-t border-slate-800">
-                            <div className="hidden lg:flex items-center space-x-3 ">
+                        <div className=" relative flex items-center justify-between lg:justify-between mt-8 px-2  pt-4 border-t border-slate-800">
+                            <div className=" items-center space-x-3 ">
                                 {/* <HiOutlineUserCircle className='text-5xl ' /> */}
                                 <div className="">
                                     <h4 className='text-lg font-semibold'>{`${user?.name || 'Guest'}`}</h4>
