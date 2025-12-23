@@ -95,7 +95,7 @@ const FoldersPage: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <header className='flex justify-between items-start'>
-          <div className="mb-8 flex flex-col lg:flex-row  items-start gap-4 lg:items-center justify-between">
+          <div className="mb-8 flex flex-col lg:flex-row  items-start gap-4 lg:items-center justify-between w-full">
             <div>
               <h1 className="text-lg lg:text-4xl font-bold text-slate-800 mb-2">Folders</h1>
               <p className="text-slate-600 text-sm">Organize your documents into folders</p>
