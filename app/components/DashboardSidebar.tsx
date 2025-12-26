@@ -65,7 +65,8 @@ const DashboardSidebar = () => {
             icon: FiFolder
         }
     ]
-
+    const max_trials = currentUser.isPaidUser ? 50 : 5;
+    console.log(currentUser.isPaidUser)
     return (
         <aside className='w-16 lg:w-1/5 bg-slate-900 min-h-screen h-screen px-2 lg:p-6 py-3 hidden md:flex flex-col justify-between text-[#EFF6FF] '>
             {isLoading && <Loading />}
@@ -73,7 +74,7 @@ const DashboardSidebar = () => {
             <div className="md:pt-3 lg:pt-0">
                 <div className=" flex justify-between items-end pb-4 border-b border-slate-800">
                     <h3 className='text-2xl font-semibold mt-3 text-[#EFF6FF] hidden lg:inline'>DocFeel</h3>
-                    <p className='text-sm font-semibold text-center lg:text-right'>{currentUser?.trialCount || 0} / 5 trials</p>
+                    {currentUser.isPaidUser && <p className='text-sm font-semibold text-center lg:text-right'>{currentUser?.trialCount || 0} / {max_trials} trials</p>}                   
                 </div>
                 <ul className='mt-12 text-[#EFF6FF] gap-3 md:flex md:flex-col'>
                     {
@@ -83,13 +84,6 @@ const DashboardSidebar = () => {
                                 <Link href={`/${navlinks.link}`} key={idx} className={`${getLinkClasses(pathName, `/${navlinks.link}`)} group relative`}>
                                     <Icon className="h-6 w-6 md:size-8  " />
                                     <span className="hidden lg:inline">{navlinks.label}</span>
-                                    {/* <span className="pointer-events-none
-      absolute left-full top-1/2 -translate-y-1/2 ml-3
-      whitespace-nowrap
-      rounded-md bg-slate-900 px-3 py-1 text-sm text-white
-      opacity-0 scale-95
-      transition-all duration-200 
-      group-hover:opacity-100 group-hover:scale-100">{navlinks.label}</span> */}
                                 </Link>
                             )
                         })
