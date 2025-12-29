@@ -18,8 +18,7 @@ const activeClass = "bg-gray-700";
 const inactiveClass = "hover:bg-gray-800";
 export const getLinkClasses = (pathName: string, href: string) => `${linkBaseClasses} ${pathName === href ? activeClass : inactiveClass}`;
 const DashboardSidebar = () => {
-    const { data: user, isLoading } = useUser();
-    const currentUser = { ...user };
+    const { data: currentUser,  } = useUser();
     const pathName = usePathname();
     const [menuOpen, setMenuOpen] = useState(false);
     const logOutUser = useLogOutUser();
@@ -70,16 +69,12 @@ const DashboardSidebar = () => {
             icon: MdOutlinePayments
         }
     ]
-    const max_trials = currentUser.isPaidUser ? 50 : 5;
-    console.log(currentUser.isPaidUser)
     return (
         <aside className='w-16 lg:w-1/5 bg-slate-900 min-h-screen h-screen px-2 lg:p-6 py-3 hidden md:flex flex-col justify-between text-[#EFF6FF] '>
-            {/* {isLoading && <Loading />} */}
-
             <div className="md:pt-3 lg:pt-0">
                 <div className=" flex flex-col gap-3 justify-between items-start pb-4 border-b border-slate-800">
                     <h3 className='text-2xl font-semibold mt-3 text-[#EFF6FF] hidden lg:inline'>DocFeel</h3>
-                    {currentUser.isPaidUser && <p className={`text-sm font-semibold text-center ${currentUser?.credits > 50 ? "text-white" : currentUser?.credits > 10 ? "text-yellow-400" : "text-red-400"}`}>{currentUser?.credits || 0} credits.</p>}                   
+                    {currentUser?.isPaidUser && <p className={`text-sm font-semibold text-center ${currentUser?.credits > 50 ? "text-white" : currentUser?.credits > 10 ? "text-yellow-400" : "text-red-400"}`}>{currentUser?.credits || 0} credits.</p>}                   
                 </div>
                 <ul className='mt-10 text-[#EFF6FF] gap-3 md:flex md:flex-col'>
                     {

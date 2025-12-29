@@ -8,7 +8,7 @@ type User = {
   isPaidUser: boolean;
   plan: string;
   trialCount: number;
-
+  credits: number;
 }
 
 type UserStore = {
@@ -32,10 +32,3 @@ export const useUserStore = create<UserStore>()(
         }
     )
 )
-
-
-// export const useUser = create<UserStore>((set) => ({
-//     user: null,
-//     setUser: (user: User) => set({ user }),
-//     logOut: () => set({ user: null })
-// }))

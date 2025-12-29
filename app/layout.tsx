@@ -1,9 +1,9 @@
-// "use client"
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { QueryProvider } from "./providers/QueryProvider";
+import { UserZustandSync } from "./config/UserZustandSync";
 
 
 export const metadata: Metadata = {
@@ -25,6 +25,7 @@ export default function RootLayout({
       <body className="">
         <QueryProvider>
         <ToastContainer />
+        <UserZustandSync/>
         {children}
         </QueryProvider>
       </body>

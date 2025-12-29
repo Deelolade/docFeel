@@ -70,7 +70,7 @@ export const useDocuments = () => {
     return useQuery<UploadedDocument[]>({
         queryKey: ['documents'],
         queryFn: handleFetchAllUserDocuments,
-        staleTime: 5 * 60 * 1000, 
+        staleTime: Infinity, 
         refetchOnMount: false,
         refetchOnWindowFocus: false
     })
