@@ -11,14 +11,15 @@ import { NavLinks } from './DashboardMain';
 import { Menu, X } from 'lucide-react';
 import { useUserStore } from '../store/userStore';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
-import { useLogOutUser } from '../hooks/useUser';
+import { useLogOutUser, useUser } from '../hooks/useUser';
 import { useDocumentStore } from '../store/documentStore';
 
 
 const DashboardMobileNav = () => {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
     const pathName = usePathname();
-    const { user } = useUserStore()
+    const { data: user, isLoading } = useUser();
+    const currentUser = { ...user };
     const [menuOpen, setMenuOpen] = useState(false);
     const logOutUser = useLogOutUser();
     const logOut = useUserStore(state => state.logOut);
@@ -62,10 +63,10 @@ const DashboardMobileNav = () => {
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
         `}
                     >
-                        <div className=" ">
-                            <div className="flex items-center justify-between h-14 px-4">
+                        <div className="">
+                            <div className="flex flex-col items-start justify-between h-14 px-4 border-b border-slate-800 pb-4">
                                 <span className="font-bold text-lg">DocFeel</span>
-                                <span>{user?.trialCount} / 5</span>
+                                {currentUser.isPaidUser && <p className={`text-sm font-semibold text-center ${currentUser?.credits > 50 ? "text-white" : currentUser?.credits > 10 ? "text-yellow-400" : "text-red-400"}`}>{currentUser?.credits || 0} credits.</p>}
                             </div>
 
                             <ul className='mt-8 px-2 text-[#EFF6FF] gap-5 md:flex md:flex-col'>
@@ -93,8 +94,8 @@ const DashboardMobileNav = () => {
                             <div className=" items-center space-x-3 ">
                                 {/* <HiOutlineUserCircle className='text-5xl ' /> */}
                                 <div className="">
-                                    <h4 className='text-lg font-semibold'>{`${user?.name || 'Guest'}`}</h4>
-                                    <p className='text-sm text-zinc-300 capitalize'>{user?.plan || 'Free'} user</p>
+                                    <h4 className='text-lg font-semibold'>{`${currentUser?.name || 'Guest'}`}</h4>
+                                    <p className='text-sm text-zinc-300 capitalize'>{currentUser?.plan || 'Free'} user</p>
                                 </div>
                             </div>
                             <button ref={buttonRef} onClick={() => setMenuOpen(!menuOpen)} className='text-xl text-zinc-300 hover:text-white transition duration-150'>

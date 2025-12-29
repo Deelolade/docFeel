@@ -3,15 +3,12 @@ import { Folder, Upload, Coins, BarChart3 } from "lucide-react";
 import { useDashboardData } from "../hooks/useDashboard";
 import Loading from "./ui/Loading";
 import ErrorState from "./ui/ErrorState";
+import { useUserStore } from "../store/userStore";
 
-// interface StatsProps {
-//   totalFolders: number;
-//   totalUploads: number;
-//   pointsRemaining: number;
-// }
-// { totalFolders, totalUploads, pointsRemaining }: StatsProps
 
 export function DashboardStats() {
+  const { user } = useUserStore();
+  const currentUser = { ...user };
   const [totalFoldersQuery, totalDocumentsQuery] = useDashboardData()
    const hasError = totalFoldersQuery.error || totalDocumentsQuery.error;
 
@@ -22,7 +19,6 @@ export function DashboardStats() {
         onRetry={() => {
           totalFoldersQuery.refetch();
           totalDocumentsQuery.refetch();
-          // pointsQ.refetch();
         }}
       />
     );
@@ -61,8 +57,8 @@ export function DashboardStats() {
           <Coins className="w-8 h-8 text-purple-100" />
           <BarChart3 className="w-5 h-5 text-purple-200" />
         </div>
-        <p className="text-purple-100 text-sm mb-1">Points Remaining</p>
-        <p className="text-4xl font-bold mb-2 text-white">{0}</p>
+        <p className="text-purple-100 text-sm mb-1">Credits Remaining</p>
+        <p className="text-4xl font-bold mb-2 text-white">{currentUser?.trialCount ||0}</p>
         <p className="text-purple-100 text-xs">Used for PDF analysis</p>
       </div>
 

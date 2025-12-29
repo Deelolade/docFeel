@@ -10,7 +10,7 @@ import { PiSquaresFourBold } from 'react-icons/pi'
 import { useEffect, useRef, useState } from 'react'
 import { useUserStore } from '../store/userStore'
 import { useDocumentStore } from '../store/documentStore'
-import { IconType } from "react-icons"
+import { MdOutlinePayments } from "react-icons/md";
 import { NavLinks } from './DashboardMain'
 
 const linkBaseClasses = "lg:w-full p-2 lg:p-3  rounded-lg my-2 flex justify-center lg:justify-start gap-4 items-center text-white font-medium transition duration-150 ease-in-out ";
@@ -65,23 +65,23 @@ const DashboardSidebar = () => {
             icon: FiFolder
         },
         {
-            label: "Folders",
-            link: 'folders',
-            icon: FiFolder
+            label: "Payments",
+            link: 'payment',
+            icon: MdOutlinePayments
         }
     ]
     const max_trials = currentUser.isPaidUser ? 50 : 5;
     console.log(currentUser.isPaidUser)
     return (
         <aside className='w-16 lg:w-1/5 bg-slate-900 min-h-screen h-screen px-2 lg:p-6 py-3 hidden md:flex flex-col justify-between text-[#EFF6FF] '>
-            {isLoading && <Loading />}
+            {/* {isLoading && <Loading />} */}
 
             <div className="md:pt-3 lg:pt-0">
-                <div className=" flex justify-between items-end pb-4 border-b border-slate-800">
+                <div className=" flex flex-col gap-3 justify-between items-start pb-4 border-b border-slate-800">
                     <h3 className='text-2xl font-semibold mt-3 text-[#EFF6FF] hidden lg:inline'>DocFeel</h3>
-                    {currentUser.isPaidUser && <p className='text-sm font-semibold text-center lg:text-right'>{currentUser?.trialCount || 0} / {max_trials} trials</p>}                   
+                    {currentUser.isPaidUser && <p className={`text-sm font-semibold text-center ${currentUser?.credits > 50 ? "text-white" : currentUser?.credits > 10 ? "text-yellow-400" : "text-red-400"}`}>{currentUser?.credits || 0} credits.</p>}                   
                 </div>
-                <ul className='mt-12 text-[#EFF6FF] gap-3 md:flex md:flex-col'>
+                <ul className='mt-10 text-[#EFF6FF] gap-3 md:flex md:flex-col'>
                     {
                         navigationLinks && navigationLinks.map((navlinks, idx) => {
                             const Icon = navlinks.icon
@@ -102,7 +102,7 @@ const DashboardSidebar = () => {
                     {/* <HiOutlineUserCircle className='text-5xl ' /> */}
                     <div className="">
                         <h4 className='text-lg font-semibold'>{`${currentUser?.name || 'Guest'}`}</h4>
-                        <p className='text-sm text-zinc-300 capitalize'>{currentUser.plan || 'Free'} user</p>
+                        <p className='text-sm text-zinc-300 capitalize'>{currentUser?.plan || 'Free'} user</p>
                     </div>
                 </div>
                 <button ref={buttonRef} onClick={() => setMenuOpen(!menuOpen)} className='text-xl text-zinc-300 hover:text-white transition duration-150'>

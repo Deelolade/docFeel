@@ -12,10 +12,6 @@ const getTotalDocuments = async (): Promise<number> => {
     return await res.data.documentCount;
 }
 
-const getPointsRemaining = async () => {
-    const res = await axios.get(`${API_URL}/dashboard/points`, { withCredentials: true });
-    return res.data.pointsRemaining;
-};
 
 // HOOKS
 export const useDashboardData = () => {
@@ -24,21 +20,17 @@ export const useDashboardData = () => {
             {
                 queryKey: ['totalFolders'],
                 queryFn: () => getTotalFolders(),
-                staleTime: 0,
+                staleTime: 60 * 60 * 1000 ,
                 refetchOnMount: false,
                 refetchOnWindowFocus: false,
             },
             {
                 queryKey: ['totalUploads'],
                 queryFn: () => getTotalDocuments(),
-                staleTime: 0,
+                staleTime: 60 * 60 * 1000 ,
                 refetchOnMount: false,
                 refetchOnWindowFocus: false,
-            },
-            // {
-            //     queryKey: ['pointsRemaining'],
-            //     queryFn: () => getPointsRemaining(),
-            // }
+            }
         ]
     })
 } 

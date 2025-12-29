@@ -39,10 +39,10 @@ export const useDocumentById = (id?: string) => {
     return useQuery<UploadedDocument>({
         queryKey: ['document', id],
         queryFn: () => handleDocument(id!),
-        staleTime: 0,
-        refetchOnWindowFocus: true, 
-        refetchOnReconnect: true,
-        refetchOnMount: true,
+        staleTime: 60 * 60 * 1000,
+        refetchOnWindowFocus: false, 
+        refetchOnReconnect: false,
+        refetchOnMount: false,
         enabled: Boolean(id),
     })
 }
