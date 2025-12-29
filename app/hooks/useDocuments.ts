@@ -3,7 +3,7 @@ import type { UploadedDocument } from "../types/document";
 import axios from "axios";
 import { API_URL } from "../config/env";
 import { toast } from "react-toastify";
-
+import { useDocumentStore } from "../store/documentStore";
 
 interface updateDocument {
     id: string;
@@ -12,7 +12,6 @@ interface updateDocument {
 // FUNCTIONS
 const handleDocument = async (id: string): Promise<UploadedDocument> => {
     const res = await axios.get(`${API_URL}/document/${id}`, { withCredentials: true })
-    console.log(res.data.document)
     return res.data.document;
 }
 const handleDeleteDocument = async (id: string) => {
@@ -78,6 +77,7 @@ export const useDocuments = () => {
 
 export const useSummarizeDocument = () => {
     const queryClient = useQueryClient();
+    const setCurrentDocument = useDocumentStore(state => state.setCurrentDocument);
     return useMutation({
         mutationFn: handleSummarizeDocument,
         onSuccess: (data, id) => {
@@ -85,6 +85,7 @@ export const useSummarizeDocument = () => {
             queryClient.invalidateQueries({ queryKey: ['document', id] });
             queryClient.invalidateQueries({ queryKey: ['documents'] });
             queryClient.invalidateQueries({ queryKey: ['user'] });
+            setCurrentDocument(data.document);
 
         },
         onError: (error: any) => {
@@ -96,7 +97,7 @@ export const useSummarizeDocument = () => {
 }
 export const useUpdateDocumentName = ()=>{
     const queryClient = useQueryClient();
-
+    const setCurrentDocument = useDocumentStore(state => state.setCurrentDocument);
     return useMutation({
         mutationFn: handleUpdateDocument,
          onSuccess:async (data, id) => {
@@ -105,6 +106,7 @@ export const useUpdateDocumentName = ()=>{
             queryClient.refetchQueries({ queryKey: ['document', id], exact: true });
             queryClient.refetchQueries({ queryKey: ['documents',], exact: true });
             queryClient.invalidateQueries({ queryKey: ['user'] });
+            setCurrentDocument(data.document);
 
         },
         onError: (error: any) => {
