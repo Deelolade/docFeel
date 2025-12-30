@@ -1,6 +1,6 @@
 import axios from "axios";
 import { API_URL } from "../config/env";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "../store/userStore";

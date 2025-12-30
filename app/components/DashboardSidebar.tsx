@@ -69,12 +69,13 @@ const DashboardSidebar = () => {
             icon: MdOutlinePayments
         }
     ]
+    console.log(currentUser)
     return (
         <aside className='w-16 lg:w-1/5 bg-slate-900 min-h-screen h-screen px-2 lg:p-6 py-3 hidden md:flex flex-col justify-between text-[#EFF6FF] '>
             <div className="md:pt-3 lg:pt-0">
                 <div className=" flex flex-col gap-3 justify-between items-start pb-4 border-b border-slate-800">
                     <h3 className='text-2xl font-semibold mt-3 text-[#EFF6FF] hidden lg:inline'>DocFeel</h3>
-                    {currentUser?.isPaidUser && <p className={`text-sm font-semibold text-center ${currentUser?.credits > 50 ? "text-white" : currentUser?.credits > 10 ? "text-yellow-400" : "text-red-400"}`}>{currentUser?.credits || 0} credits.</p>}                   
+                    {currentUser?.isPaidUser ? <p className={`text-sm font-semibold text-center ${currentUser?.credits > 50 ? "text-white" : currentUser?.credits > 10 ? "text-yellow-400" : "text-red-400"}`}>{currentUser?.credits || 0} credits.</p> : <p className='text-sm font-semibold text-center text-gray-400'>{currentUser?.trialCount || 0 } / 10 Trials remaining</p>}                   
                 </div>
                 <ul className='mt-10 text-[#EFF6FF] gap-3 md:flex md:flex-col'>
                     {

@@ -66,7 +66,7 @@ const DashboardMobileNav = () => {
                         <div className="">
                             <div className="flex flex-col items-start justify-between h-14 px-4 border-b border-slate-800 pb-4">
                                 <span className="font-bold text-lg">DocFeel</span>
-                                {currentUser.isPaidUser && <p className={`text-sm font-semibold text-center ${currentUser?.credits > 50 ? "text-white" : currentUser?.credits > 10 ? "text-yellow-400" : "text-red-400"}`}>{currentUser?.credits || 0} credits.</p>}
+                                {currentUser.isPaidUser ? <p className={`text-sm font-semibold text-center ${currentUser?.credits > 50 ? "text-white" : currentUser?.credits > 10 ? "text-yellow-400" : "text-red-400"}`}>{currentUser?.credits || 0} credits.</p> : <p className='text-sm font-semibold text-center text-gray-400'>{currentUser?.trialCount || 0 } / 10 Trials remaining</p>}
                             </div>
 
                             <ul className='mt-8 px-2 text-[#EFF6FF] gap-5 md:flex md:flex-col'>
